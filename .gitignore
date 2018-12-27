@@ -12,3 +12,7 @@ dist
 
 # Mac OS
 .DS_Store
+
+# Idea
+.idea
+null
