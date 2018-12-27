@@ -1,11 +1,11 @@
 <template>
-  <v-app dark>
-    <v-content>
-      <v-btn color="primary">Hello world</v-btn>
-    </v-content>
-  </v-app>
+  <v-btn color="primary">Hello world</v-btn>
 </template>
 
 <script>
-export default {}
+export default {
+  created () {
+    this.$store.commit('SET_TITLE', 'Home')
+  }
+}
 </script>

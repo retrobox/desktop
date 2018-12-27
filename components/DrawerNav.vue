@@ -1,12 +1,12 @@
 <template>
   <v-navigation-drawer
     fixed
-    v-model="$store.state.drawer"
+    v-model="drawer"
     app
   >
     <v-list dense>
       <v-list-tile
-        :to="{ name: 'home' }"
+        to="/"
         ripple
         exact>
         <v-list-tile-action>
@@ -17,7 +17,7 @@
         </v-list-tile-content>
       </v-list-tile>
       <v-list-tile
-        :to="{ name: 'installation' }"
+        to="/installation"
         ripple
         exact>
         <v-list-tile-action>
@@ -33,6 +33,17 @@
 
 <script>
 export default {
-	name: 'DrawerNav'
+  name: 'DrawerNav',
+  data: () => ({
+	  drawer: null
+  }),
+  watch: {
+    '$store.state.drawer': function (value) {
+      this.drawer = value
+    },
+    'drawer': function (value) {
+      this.$store.commit('TOGGLE_DRAWER', value)
+    }
+  }
 }
 </script>
