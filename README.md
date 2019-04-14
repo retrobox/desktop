@@ -1,3 +1,4 @@
+
 # Desktop electron app
 
 Build with electron-vue
@@ -15,7 +16,7 @@ Build with electron-vue
 - request-progress
 - axios
 
-#### Build Setup
+#### Build Setup (linux)
 
 ``` bash
 # install dependencies
@@ -30,9 +31,41 @@ npm run build
 
 ```
 
----
+-------
 
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[8fae476](https://github.com/SimulatedGREG/electron-vue/tree/8fae4763e9d225d3691b627e83b9e09b56f6c935) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+#### Build Setup (windows)
+
+Environment needed (or recommended) :
+
+1. VS Enterprise 2015 with all components (or just community version)
+2. Python 2.7 (and ONLY this version)
+3. Npm v6.4.1 (or newer)
+4. Node v10.15.0 (or newer)
+
+``` bash
+# install dependencies
+npm install
+
+# install Native Node Modules
+npm install --save-dev electron-rebuild
+
+# serve with hot reload at localhost:9080
+npm run dev
+
+# build electron application for production
+npm run build
+
+# Every time you run "npm install", run this
+./node_modules/.bin/electron-rebuild
+
+```
+You will get frequently error with drivelist dependency... So we found the fix : Install VS Enterprise 2015 and everything was functional !
+
+More information's here :
+
+[Natives Node Modules](https://github.com/electron/electron/blob/v0.37.2/docs/tutorial/using-native-node-modules.md#using-native-node-modules)
+
+[Our issue on drivelist](https://github.com/balena-io-modules/drivelist/issues/340)
 
 ## sudo prompt
 
