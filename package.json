@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "drivelist": "^8.0.6",
     "electron": "^4.1.4"
   }
 }
