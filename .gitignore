@@ -5,3 +5,4 @@ build
 tmp
 tmp/
 dist.zip
+extracted_image/
