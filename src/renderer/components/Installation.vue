@@ -3,7 +3,7 @@
         <v-layout fill-height justify-center align-center py-3 v-if="globalLoading">
             <v-progress-circular indeterminate></v-progress-circular>
         </v-layout>
-        <v-layout fill-height justify-center align-center py-3 v-if="isElevated === false">
+        <v-layout fill-height justify-center align-center py-3 v-if="isElevated === false && needToBeElevated == true">
             <v-layout justify-center column class="text-xs-center">
                 <v-icon style="font-size:3em">error</v-icon>
                 <div class="mt-3">
@@ -11,7 +11,7 @@
                 </div>            
             </v-layout>
         </v-layout>
-        <div v-else>
+        <div v-if="globalLoading == false && needToBeElevated == false">
             <v-layout class="mb-3" justify-center align-center>
                 <v-img src="https://raw.githubusercontent.com/retrobox/web/master/assets/images/nav.png" height="40" contain />
             </v-layout>
@@ -60,7 +60,7 @@
                         </v-card>
 
                         <v-layout justify-end>
-                            <v-btn outline color="yellow" @click="scanTick()">
+                            <v-btn outline color="yellow" @click="scanTick(true)">
                                 <v-icon left>refresh</v-icon>
                                 Refresh
                             </v-btn>
@@ -139,8 +139,7 @@
 </template>
 
 <script>
-
-    import { remote, app } from 'electron'
+    const electron = require('electron')
     const Sudoer = require('electron-sudo').default;
 
     const drivelist = require('drivelist')
@@ -180,15 +179,25 @@
             extractingImage: false,
             unCompressing: false,
             imageSha256Hash: "47ef1b2501d0e5002675a50b6868074e693f78829822eef64f3878487953234d",
-            imagePath: './dist.zip',
-            extractPath: './extracted_image',
+            imagePath: 'dist.zip',
+            extractPath: 'extracted_image',
             debug: '',
             isElevated: true,
             rawDrivesLenght: -1,
             isWifiSsidCorrect: false,
-            isWifiPasswordCorrect: false
+            isWifiPasswordCorrect: false,
+            needToBeElevated: false
         }),
         created() {
+            this.tmpPath = electron.remote.app.getPath('appData') + '/retrobox-desktop'
+            this.imagePath = this.tmpPath + '/' + this.imagePath 
+            this.extractPath = this.tmpPath + '/' + this.extractPath 
+
+            console.log(this.imagePath)
+            console.log(this.extractPath)
+
+            this.needToBeElevated = os.platform() === 'linux' || os.platform() == 'darwin'
+            
             // console.log('created')
             // console.log(remote.app.getPath('exe'))
             // console.log(remote.app.getAppPath())
@@ -198,8 +207,11 @@
             isElevated().then(elevated => {
                 this.isElevated = elevated
                 console.log('isElevated: ' + elevated)
-                this.globalLoading = false
+                setTimeout(() => {
+                    this.globalLoading = false
+                }, 500)
             });
+            
 
             this.scanTick()
         },
@@ -244,10 +256,11 @@
                     })
                 })
             },
-            scanTick() {
+            scanTick(standalone = false) {
                 drivelist.list().then((drives) => {
                     if (this.rawDrivesLenght != drives.length) {
                         console.log('drive changed')
+
                         this.rawDrivesLenght = drives.length
 
                         this.drives = drives
@@ -271,11 +284,13 @@
                         })
                     }
 
-                    setTimeout(() => {
-                        if (this.stopScan == false) {
-                            this.scanTick()
-                        }
-                    }, 1000)
+                    if (standalone == false) {
+                        setTimeout(() => {
+                            if (this.stopScan == false) {
+                                this.scanTick()
+                            }
+                        }, 1000)
+                    }
                 })
             },
             doDownload () {
@@ -388,6 +403,7 @@
 
             },
             writeImage() {
+                console.log('extracting image...')
                 // const sudo = require('sudo-prompt');
                 // var options = {
                 //     name: 'Retrobox'
@@ -403,54 +419,51 @@
                 this.writingImage = false
                 this.checkingImage = true
                 this.checkingImageState.percentHuman = 100
-                setTimeout(() => {
-                    this.onImageWrote()
-                }, 1500)
-                // const imageWrite = require('etcher-image-write')
+                const imageWrite = require('etcher-image-write')
 
-                // let extractedImagePath = this.extractPath + '/' + fs.readdirSync(this.extractPath)[0]
+                let extractedImagePath = this.extractPath + '/' + fs.readdirSync(this.extractPath)[0]
 
-                // console.log(extractedImagePath)
+                console.log(extractedImagePath)
+                console.log(this.chosenDrive.device)
+                console.log(this.chosenDrive.size)
 
-                // console.log(this.chosenDrive.device)
-                // console.log(this.chosenDrive.size)
-                // let emitter = imageWrite.write({
-                //   fd: fs.openSync(this.chosenDrive.device, 'rs+'),
-                //   device: this.chosenDrive.device,
-                //   size: this.chosenDrive.size
-                // }, {
-                //   stream: fs.createReadStream(extractedImagePath),
-                //   size: fs.statSync(extractedImagePath).size
-                // }, {
-                //   check: true
-                // });
+                let emitter = imageWrite.write({
+                  fd: fs.openSync(this.chosenDrive.device, 'rs+'),
+                  device: this.chosenDrive.device,
+                  size: this.chosenDrive.size
+                }, {
+                  stream: fs.createReadStream(extractedImagePath),
+                  size: fs.statSync(extractedImagePath).size
+                }, {
+                  check: true
+                });
 
-                // emitter.on('progress', (state) => {
-                //   console.log(state);
-                //   if (state.type == 'write') {
-                //       this.writingImage = true
-                //       this.writingImageState.percentHuman = state.percentage.toFixed(2)
-                //   }
-                //   if (state.type == 'check') {
-                //       this.writingImage = false
-                //       this.checkingImage = true
-                //       this.checkingImageState.percentHuman = state.percentage.toFixed(2)
-                //   }
-                // });
+                emitter.on('progress', (state) => {
+                  console.log(state);
+                  if (state.type == 'write') {
+                      this.writingImage = true
+                      this.writingImageState.percentHuman = state.percentage.toFixed(2)
+                  }
+                  if (state.type == 'check') {
+                      this.writingImage = false
+                      this.checkingImage = true
+                      this.checkingImageState.percentHuman = state.percentage.toFixed(2)
+                  }
+                });
 
-                // emitter.on('error', (error) => {
-                //     console.log('error occured')
-                //     console.error(error);
-                // });
+                emitter.on('error', (error) => {
+                    console.log('error occured')
+                    console.error(error);
+                });
 
-                // emitter.on('done', (results) => {
-                //   console.log('Success!');
-                //   this.onImageWrote()
-                // });
+                emitter.on('done', (results) => {
+                  console.log('Success!');
+                  this.onImageWrote()
+                });
             },
             onImageWrote() {
                 this.checkingImage = false
-                console.log('writing file on the device')
+                console.log('onImageWrote: writing file on the device')
                 drivelist.list().then((drives) => {
                     console.log(this.chosenDrive.device)
                     let device = drives.filter(d => this.chosenDrive.device === d.device)[0]
