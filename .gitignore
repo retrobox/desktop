@@ -6,3 +6,5 @@ tmp
 tmp/
 dist.zip
 extracted_image/
+dist
+dist/
