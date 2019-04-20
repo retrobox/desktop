@@ -13,7 +13,7 @@
         </v-layout>
         <div v-else>
             <v-layout class="mb-3" justify-center align-center>
-                <v-img src="https://retrobox.tech/_nuxt/assets/images/nav.png" height="40" contain />
+                <v-img src="https://raw.githubusercontent.com/retrobox/web/master/assets/images/nav.png" height="40" contain />
             </v-layout>
             <div v-html="debug"></div>
 
