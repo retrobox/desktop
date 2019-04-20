@@ -88,11 +88,11 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <v-progress-linear v-if="downloadingImage" v-model="imageDownloadState.percentHuman"></v-progress-linear>
+                        <v-progress-linear v-if="downloadingImage" v-model="imageDownloadState"></v-progress-linear>
                         <v-progress-linear v-else indeterminate></v-progress-linear>
 
                         <v-layout justify-center align-center class="pt-2">
-                            <span v-if="downloadingImage">Downloading image... ({{ imageDownloadState.percentHuman }} %)</span>
+                            <span v-if="downloadingImage">Downloading image... ({{ imageDownloadState }} %)</span>
                             <span v-if="extractingImage">Extracting image... </span>
                         </v-layout>
                     </v-stepper-content>
@@ -161,9 +161,7 @@
             country: '',
             loadingCountries: false,
             countries: [],
-            imageDownloadState: {
-                percentHuman: "0.00"
-            },
+            imageDownloadState: "0.00",
             writingImage: false,
             writingImageState: {
                 percentHuman: "0.00"
@@ -229,7 +227,7 @@
                 this.loadingCountries = true
                 this.$http.get('https://raw.githubusercontent.com/lefuturiste/countries/master/en.json').then((response) => {
                     this.countries = response.data.countries.map(country => {
-                        return {
+                    return {
                             value: country.code,
                             text: country.name
                         }
@@ -318,9 +316,7 @@
                         console.log('downloading the zip...')
                         progress(request(imageUrl), {})
                         .on("progress", state => {
-                            console.log(state)
-                            this.imageDownloadState = state
-                            this.imageDownloadState.percentHuman = (state.percent * 100).toFixed(2)
+                            this.imageDownloadState = (state.percent * 100).toFixed(2)
                         })
                         .on("error", function (err) {
                             console.log("error with the image download");
@@ -456,15 +452,15 @@
                     let bootRootPath = bootMountPoint.path
                     console.log(bootRootPath)
                     /*
-                    ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-                    update_config=1
-                    country=«your_ISO-3166-1_two-letter_country_code»
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=«your_ISO-3166-1_two-letter_country_code»
 
-                    network={
-                        ssid="«your_SSID»"
-                        psk="«your_PSK»"
-                        key_mgmt=WPA-PSK
-                    }
+network={
+    ssid="«your_SSID»"
+    psk="«your_PSK»"
+    key_mgmt=WPA-PSK
+}
                     */
 
                     let lines = "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev \n"
