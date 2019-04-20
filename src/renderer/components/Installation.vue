@@ -144,6 +144,7 @@
     const fs = require('fs')
     const request = require("request")
     const path = require("path")
+    const os = require("os")
     const progress = require("request-progress")
     const decompress = require('decompress');
     const decompressUnzip = require('decompress-unzip');
@@ -240,6 +241,7 @@
             },
             scanTick() {
                 drivelist.list().then((drives) => {
+                    console.log(drives)
 
                     if (this.rawDrivesLenght != drives.length) {
                         console.log('drive changed')
@@ -254,7 +256,10 @@
                         this.drives = this.drives.map((device) => {
                             device.humanName = device.device
                             device.humanSize = filesize(device.size)
-                            let realName = device.description.substring(0, device.description.indexOf('('))
+                            let realName = device.description
+                            if (device.description.indexOf('(') != -1) {
+                                realName = device.description.substring(0, device.description.indexOf('('))
+                            }                            
                             if (realName !== '') {
                                 device.humanName = device.humanName + ' - ' + realName
                             }
