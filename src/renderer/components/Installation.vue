@@ -60,6 +60,11 @@
                         </v-card>
 
                         <v-layout justify-end>
+                            <v-btn outline color="yellow" @click="scanTick()">
+                                <v-icon left>refresh</v-icon>
+                                Refresh
+                            </v-btn>
+                            <v-spacer />
                             <v-btn color="primary" @click="step = 2" :disabled="chosenDrive == 0">Continue</v-btn>
                         </v-layout>
 
@@ -241,8 +246,6 @@
             },
             scanTick() {
                 drivelist.list().then((drives) => {
-                    console.log(drives)
-
                     if (this.rawDrivesLenght != drives.length) {
                         console.log('drive changed')
                         this.rawDrivesLenght = drives.length
@@ -259,7 +262,7 @@
                             let realName = device.description
                             if (device.description.indexOf('(') != -1) {
                                 realName = device.description.substring(0, device.description.indexOf('('))
-                            }                            
+                            }                 
                             if (realName !== '') {
                                 device.humanName = device.humanName + ' - ' + realName
                             }
