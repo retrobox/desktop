@@ -11,7 +11,7 @@
                 </div>            
             </v-layout>
         </v-layout>
-        <div v-if="globalLoading == false && needToBeElevated == false">
+        <div v-if="globalLoading == false && (isElevated || !needToBeElevated)">
             <v-layout class="mb-3" justify-center align-center>
                 <v-img src="https://raw.githubusercontent.com/retrobox/web/master/assets/images/nav.png" height="40" contain />
             </v-layout>
@@ -78,7 +78,13 @@
                             <v-card-text>
                                 <v-form>
                                     <v-text-field label="Wifi SSID" v-model="wifiSsid" autofocus max="32" />
-                                    <v-text-field label="Wifi Password" type="password" v-model="wifiPassword" min="6" />
+                                    <v-text-field 
+                                        label="Wifi Password"
+                                        v-model="wifiPassword"
+                                        min="6"
+                                        :append-icon="isWifiPasswordVisible ? 'visibility_off' : 'visibility'"
+                                        v-on:click:append="isWifiPasswordVisible = !isWifiPasswordVisible"
+                                        :type="isWifiPasswordVisible ? 'text' : 'password'" />
                                     <v-autocomplete v-model="country" :items="countries" menu-props="auto" label="Select your country"
                                         hide-details prepend-icon="map" :loading="loadingCountries" single-line></v-autocomplete>
                                 </v-form>
@@ -186,7 +192,8 @@
             rawDrivesLenght: -1,
             isWifiSsidCorrect: false,
             isWifiPasswordCorrect: false,
-            needToBeElevated: false
+            needToBeElevated: false,
+            isWifiPasswordVisible: false
         }),
         created() {
             this.tmpPath = electron.remote.app.getPath('appData') + '/retrobox-desktop'
