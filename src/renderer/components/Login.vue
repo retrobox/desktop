@@ -48,9 +48,9 @@ const io = require('socket.io-client')
 const child_process = require('child_process')
 export default {
     data: () => ({
-        apiEndpoint: 'http://localhost:8000',
-        webEndpoint: 'http://localhost:3000',
-        webSocketEndpoint: 'http://localhost:3008',
+        apiEndpoint: process.env.API_ENDPOINT,
+        webEndpoint: process.env.WEB_ENDPOINT,
+        webSocketEndpoint: process.env.WEB_SOCKET_ENDPOINT,
         opened: false,
         loading: false,
         urlToOpen: ''
