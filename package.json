@@ -46,16 +46,13 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico",
+      "icon": "icons/icon.ico",
       "requestedExecutionLevel": "highestAvailable"
     },
     "linux": {
-      "icon": "build/icons"
-    },
-    "appImage": {
       "icon": "icons"
     }
   },
