@@ -20,9 +20,14 @@
   "build": {
     "productName": "Retrobox Desktop App",
     "appId": "tech.retrobox.desktop",
-    "directories": {},
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
     "files": [
-      "dist/electron/**/*",
+      "dist/electron",
+      "node_modules/",
+      "package.json",
       "build/icon.*"
     ],
     "dmg": {
@@ -41,13 +46,16 @@
       ]
     },
     "mac": {
-      "icon": "icons/icon.icns"
+      "icon": "build/icons/icon.icns"
     },
     "win": {
-      "icon": "icons/icon.png",
+      "icon": "build/icons/icon.ico",
       "requestedExecutionLevel": "highestAvailable"
     },
     "linux": {
+      "icon": "build/icons"
+    },
+    "appImage": {
       "icon": "icons"
     }
   },
@@ -96,6 +104,7 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "0.4.0",
     "multispinner": "^0.2.1",
+    "network-address": "^1.1.2",
     "node-loader": "^0.6.0",
     "node-sass": "^4.9.2",
     "sass-loader": "^7.0.3",

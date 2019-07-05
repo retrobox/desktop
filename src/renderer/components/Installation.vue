@@ -188,10 +188,23 @@ export default {
     rawDrivesLenght: -1,
     isWifiSsidCorrect: false,
     isWifiPasswordCorrect: false,
-    isWifiPasswordVisible: false
+    isWifiPasswordVisible: false,
+    tmpPath: ''
   }),
   created() {
-    this.tmpPath = electron.remote.app.getPath("appData") + "/retrobox-desktop";
+    if (process.env.TMP_PATH != undefined && process.env.TMP_PATH != null) {
+      this.tmpPath = process.TMP_PATH
+    } else {
+      this.tmpPath = electron.remote.app.getPath("appData") + "/retrobox-desktop";    
+      //create directory if do not exist
+      if (!fs.existsSync(this.tmpPath)) {
+        console.log('tmp dir created')
+        fs.mkdirSync(this.tmpPath)
+      }
+    }
+
+    console.log(this.tmpPath)
+
     this.imagePath = this.tmpPath + "/" + this.imagePath;
     this.extractPath = this.tmpPath + "/" + this.extractPath;
 

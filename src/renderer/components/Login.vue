@@ -48,14 +48,30 @@ const io = require('socket.io-client')
 const child_process = require('child_process')
 export default {
     data: () => ({
-        apiEndpoint: process.env.API_ENDPOINT,
-        webEndpoint: process.env.WEB_ENDPOINT,
-        webSocketEndpoint: process.env.WEB_SOCKET_ENDPOINT,
+        apiEndpoint: '',
+        webEndpoint: '',
+        webSocketEndpoint: '',
         opened: false,
         loading: false,
         urlToOpen: ''
     }),
     created () {
+        let envs = [
+            process.env.API_ENDPOINT,
+            process.env.WEB_ENDPOINT,
+            process.env.WEB_SOCKET_ENDPOINT
+        ]
+        if (process.env.NODE_ENV === 'development') {
+            const ip = require('network-address')
+            envs[0] = envs[0] === undefined ? 'http://' + ip() + ':8000' : envs[0]
+            envs[1] = envs[1] === undefined ? 'http://' + ip() + ':3000' : envs[1]
+            envs[2] = envs[2] === undefined ? 'http://' + ip() + ':3008' : envs[2]
+        }
+        console.log(envs)
+
+        this.apiEndpoint = envs[0]
+        this.webEndpoint = envs[1]
+        this.webSocketEndpoint = envs[2]
     },
     methods: {
         login: function () {

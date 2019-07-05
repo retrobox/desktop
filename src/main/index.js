@@ -18,11 +18,20 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-process.env.WEB_ENDPOINT = process.env.WEB_ENDPOINT === undefined ? 'https://retrobox.tech' : process.env.WEB_ENDPOINT
+/* 
 
-process.env.API_ENDPOINT = process.env.API_ENDPOINT === undefined ? 'https://api.retrobox.tech' : process.env.API_ENDPOINT
+if (process.env.NODE_ENV !== 'development') {
+  process.env.WEB_ENDPOINT = process.env.WEB_ENDPOINT === undefined ? 'https://retrobox.tech' : process.env.WEB_ENDPOINT
+  process.env.API_ENDPOINT = process.env.API_ENDPOINT === undefined ? 'https://api.retrobox.tech' : process.env.API_ENDPOINT
+  process.env.WEB_SOCKET_ENDPOINT = process.env.WEB_SOCKET_ENDPOINT === undefined ? 'https://ws.retrobox.tech' : process.env.WEB_SOCKET_ENDPOINT
+} else {
+  let localIp  = require('network-address')()
+  process.env.WEB_ENDPOINT = process.env.WEB_ENDPOINT === undefined ? localIp + ':3000' : process.env.WEB_ENDPOINT
+  process.env.API_ENDPOINT = process.env.API_ENDPOINT === undefined ? localIp + ':8000' : process.env.API_ENDPOINT
+  process.env.WEB_SOCKET_ENDPOINT = process.env.WEB_SOCKET_ENDPOINT === undefined ? localIp + ':3008' : process.env.WEB_SOCKET_ENDPOINT
+}
 
-process.env.WEB_SOCKET_ENDPOINT = process.env.WEB_SOCKET_ENDPOINT === undefined ? 'https://ws.retrobox.tech' : process.env.WEB_SOCKET_ENDPOINT
+*/
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development' ?
