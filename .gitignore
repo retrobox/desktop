@@ -1,15 +1,10 @@
 node_modules
 node_modules/
-build/
-build
 tmp
 tmp/
 dist.zip
 extracted_image/
 dist
 dist/
-__build
 __dist
-_build
 dist
-build
