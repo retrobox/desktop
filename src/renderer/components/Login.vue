@@ -62,10 +62,15 @@ export default {
             process.env.WEB_SOCKET_ENDPOINT
         ]
         if (process.env.NODE_ENV === 'development') {
-            const ip = require('network-address')
-            envs[0] = envs[0] === undefined ? 'http://' + ip() + ':8000' : envs[0]
-            envs[1] = envs[1] === undefined ? 'http://' + ip() + ':3000' : envs[1]
-            envs[2] = envs[2] === undefined ? 'http://' + ip() + ':3008' : envs[2]
+            if (process.env.DEV_REMOTE_ADDRESS !== undefined) {
+                let ip = process.env.DEV_REMOTE_ADDRESS
+            } else {
+                let ip = require('network-address')()
+            }
+    
+            envs[0] = envs[0] === undefined ? 'http://' + ip + ':8000' : envs[0]
+            envs[1] = envs[1] === undefined ? 'http://' + ip + ':3000' : envs[1]
+            envs[2] = envs[2] === undefined ? 'http://' + ip + ':3008' : envs[2]
         }
         console.log(envs)
 
