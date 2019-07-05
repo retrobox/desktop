@@ -90,12 +90,35 @@
       isLogged: null,
       alert: false,
       isElevated: true,
-      needToBeElevated: false,
+      needToBeElevated: true,
       globalLoading: true,
       dark: false,
       logoutConfirmationModal: false
     }),
     created() {
+      let envs = [
+        process.env.API_ENDPOINT,
+        process.env.WEB_ENDPOINT,
+        process.env.WEB_SOCKET_ENDPOINT
+      ]
+      if (process.env.NODE_ENV === 'development') {
+        console.log('development environment used')
+        let ip = null
+        if (process.env.DEV_REMOTE_ADDRESS !== undefined) {
+          console.log('custom dev remote address detected', process.env.DEV_REMOTE_ADDRESS)
+          ip = process.env.DEV_REMOTE_ADDRESS
+        } else {
+          ip = require('network-address')()
+        }
+        envs[0] = envs[0] === undefined ? 'http://' + ip + ':8000' : envs[0]
+        envs[1] = envs[1] === undefined ? 'http://' + ip + ':3000' : envs[1]
+        envs[2] = envs[2] === undefined ? 'http://' + ip + ':3008' : envs[2]
+      } 
+      console.log('env endpoints used:', envs)
+      this.$store.commit('SET_API_ENDPOINT', envs[0])
+      this.$store.commit('SET_WEB_ENDPOINT', envs[1])
+      this.$store.commit('SET_WEB_SOCKET_ENDPOINT', envs[2])
+      
       //this.needToBeElevated = os.platform() === 'linux' || os.platform() == 'darwin'
 
       // verify if logged
@@ -109,6 +132,9 @@
       isElevated().then(elevated => {
           this.isElevated = elevated
           console.log('isElevated: ' + elevated)
+          if (this.needToBeElevated && !this.elevated) {
+            console.warn("The application doesn't have administrator privileges!")
+          }
           setTimeout(() => {
               this.globalLoading = false
           }, 500)

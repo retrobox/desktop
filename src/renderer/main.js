@@ -4,17 +4,18 @@ import Vuetify from 'vuetify'
 import App from './App'
 import 'vuetify/dist/vuetify.min.css'
 import VueClipboard from 'vue-clipboard2'
+import store from './store'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 Vue.use(Vuetify)
-
 Vue.use(VueClipboard)
 
 /* eslint-disable no-new */
 new Vue({
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  store
 }).$mount('#app')

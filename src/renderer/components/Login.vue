@@ -48,46 +48,18 @@ const io = require('socket.io-client')
 const child_process = require('child_process')
 export default {
     data: () => ({
-        apiEndpoint: '',
-        webEndpoint: '',
-        webSocketEndpoint: '',
         opened: false,
         loading: false,
         urlToOpen: ''
     }),
-    created () {
-        let envs = [
-            process.env.API_ENDPOINT,
-            process.env.WEB_ENDPOINT,
-            process.env.WEB_SOCKET_ENDPOINT
-        ]
-        if (process.env.NODE_ENV === 'development') {
-            let ip = null
-
-            console.log('dev remote addr:', process.env.DEV_REMOTE_ADDRESS)
-
-            if (process.env.DEV_REMOTE_ADDRESS !== undefined) {
-                ip = process.env.DEV_REMOTE_ADDRESS
-            } else {
-                ip = require('network-address')()
-            }
-    
-            envs[0] = envs[0] === undefined ? 'http://' + ip + ':8000' : envs[0]
-            envs[1] = envs[1] === undefined ? 'http://' + ip + ':3000' : envs[1]
-            envs[2] = envs[2] === undefined ? 'http://' + ip + ':3008' : envs[2]
-        }
-        console.log(envs)
-
-        this.apiEndpoint = envs[0]
-        this.webEndpoint = envs[1]
-        this.webSocketEndpoint = envs[2]
+    created () {   
     },
     methods: {
         login: function () {
             this.loading = true
-            axios.get(this.apiEndpoint + '/account/login-desktop').then((res) => {
+            axios.get(this.$store.state.apiEndpoint + '/account/login-desktop').then((res) => {
                 let token = res.data.data.token
-                this.urlToOpen = this.webEndpoint + '/dashboard/login-desktop?token=' + token
+                this.urlToOpen = this.$store.state.webEndpoint + '/dashboard/login-desktop?token=' + token
                 console.log(this.urlToOpen)
                 //child_process.execSync('xdg-open ' + this.urlToOpen)
                 let opened = shell.openExternal(this.urlToOpen)
@@ -96,7 +68,7 @@ export default {
                     this.opened = opened
                 }, 200)
                 // websocket
-                let socket = io(this.webSocketEndpoint, {
+                let socket = io(this.$store.state.webSocketEndpoint, {
                     transportOptions: {
                         polling: {
                             extraHeaders: {
