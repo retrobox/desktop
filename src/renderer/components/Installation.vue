@@ -189,24 +189,25 @@ export default {
     isWifiSsidCorrect: false,
     isWifiPasswordCorrect: false,
     isWifiPasswordVisible: false,
-    tmpPath: '',
-    extractedImagePath: '',
-    extractedImageName: 'extracted_image.img'
+    tmpPath: "",
+    extractedImagePath: "",
+    extractedImageName: "extracted_image.img"
   }),
   created() {
     if (process.env.TMP_PATH != undefined && process.env.TMP_PATH != null) {
-      this.tmpPath =  process.env.TMP_PATH
-      console.warn('Use a tmp path from environment variable')
+      this.tmpPath = process.env.TMP_PATH;
+      console.warn("Use a tmp path from environment variable");
     } else {
-      this.tmpPath = electron.remote.app.getPath("appData") + "/retrobox-desktop";    
+      this.tmpPath =
+        electron.remote.app.getPath("appData") + "/retrobox-desktop";
       //create directory if do not exist
       if (!fs.existsSync(this.tmpPath)) {
-        console.log('tmp dir created')
-        fs.mkdirSync(this.tmpPath)
+        console.log("tmp dir created");
+        fs.mkdirSync(this.tmpPath);
       }
     }
 
-    console.log('tmp path used:', this.tmpPath)
+    console.log("tmp path used:", this.tmpPath);
 
     this.imagePath = this.tmpPath + "/" + this.imagePath;
     this.extractPath = this.tmpPath + "/" + this.extractPath;
@@ -321,7 +322,7 @@ export default {
           // making digest
           s.on("end", () => {
             const hash = shasum.digest("hex");
-            console.log(hash)
+            console.log(hash);
             if (hash != this.imageSha256Hash) {
               // hash is diferent
               console.log("hash do not match");
@@ -342,7 +343,8 @@ export default {
     downloadImage() {
       // verify if the image already exist in the directory
 
-      let imageUrl = "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-06-24/2019-06-20-raspbian-buster-lite.zip";
+      let imageUrl =
+        "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-06-24/2019-06-20-raspbian-buster-lite.zip";
 
       this.doDownload().then(download => {
         console.log("download: " + download);
@@ -353,27 +355,27 @@ export default {
           let writeStream = fs.createWriteStream(path.resolve(this.imagePath));
           progress(request(imageUrl), {})
             .on("progress", state => {
-              console.log(state)
+              console.log(state);
               this.imageDownloadState = (state.percent * 100).toFixed(2);
             })
             .on("error", function(err) {
               console.log("error with the image download");
               console.log(err);
             })
-            .on('end', function(err) {
-              console.log('end of progress')
+            .on("end", function(err) {
+              console.log("end of progress");
             })
             .pipe(writeStream);
-          console.log('_processing')
-          writeStream.on('close', () => {
-             console.log('writing stream finish')
-             console.log("finish of the image download");
-             setTimeout(() => {
-                console.log('reloop on download image...')
-                this.downloadingImage = true;
-                this.downloadImage();
-             }, 1000)
-          })
+          console.log("_processing");
+          writeStream.on("close", () => {
+            console.log("writing stream finish");
+            console.log("finish of the image download");
+            setTimeout(() => {
+              console.log("reloop on download image...");
+              this.downloadingImage = true;
+              this.downloadImage();
+            }, 1000);
+          });
         } else {
           console.log("do not download");
           if (
@@ -391,18 +393,19 @@ export default {
       });
     },
     decompressImage() {
-      let zipPath = path.resolve(this.imagePath)
+      let zipPath = path.resolve(this.imagePath);
       console.log("decompress zip of path:", zipPath);
-      this.extractedImagePath = this.tmpPath + '/' + this.extractedImageName;
-      console.log("Writing extracted image on:", this.extractedImagePath)
+      this.extractedImagePath = this.tmpPath + "/" + this.extractedImageName;
+      console.log("Writing extracted image on:", this.extractedImagePath);
 
-      const yauzl = require('yauzl')
+      const yauzl = require("yauzl");
       yauzl.open(
-        path.resolve(this.imagePath), 
-        {lazyEntries: true}, (err, zipfile) => {
+        path.resolve(this.imagePath),
+        { lazyEntries: true },
+        (err, zipfile) => {
           if (err) throw err;
           zipfile.readEntry();
-          zipfile.on("entry", (entry) => {
+          zipfile.on("entry", entry => {
             zipfile.openReadStream(entry, (err, readStream) => {
               if (err) throw err;
               let writeStream = fs.createWriteStream(
@@ -412,14 +415,15 @@ export default {
                 zipfile.readEntry();
               });
               readStream.pipe(writeStream);
-              writeStream.on('close', () => {
+              writeStream.on("close", () => {
                 this.extractingImage = false;
                 this.step = 4;
                 console.log("Files decompressed");
-              })
+              });
             });
           });
-       });
+        }
+      );
     },
     trySmth() {
       this.step = 5;
@@ -447,7 +451,7 @@ export default {
     },
     writeImage() {
       console.log("now extracting image...");
-      console.log("using image path:", this.extractedImagePath)
+      console.log("using image path:", this.extractedImagePath);
       // const sudo = require('sudo-prompt');
       // var options = {
       //     name: 'Retrobox'
@@ -464,8 +468,8 @@ export default {
       this.checkingImage = false;
       const imageWrite = require("etcher-image-write");
 
-      console.log('Using device:', this.chosenDrive.device);
-      console.log('With size', this.chosenDrive.size);
+      console.log("Using device:", this.chosenDrive.device);
+      console.log("With size", this.chosenDrive.size);
 
       let emitter = imageWrite.write(
         {
@@ -516,17 +520,15 @@ export default {
         )[0];
         console.log(device);
         console.log(device.mountpoints);
-        let bootMountPoint = device.mountpoints.filter(
-          m => m.label === "boot"
-        );
+        let bootMountPoint = device.mountpoints.filter(m => m.label === "boot");
         if (bootMountPoint.length === 0) {
           // use first boot mount point if no mount point found with the label filter
-          bootMountPoint = device.mountpoints[0]
+          bootMountPoint = device.mountpoints[0];
         } else {
-          bootMountPoint = bootMountPoint[0]
+          bootMountPoint = bootMountPoint[0];
         }
         let bootRootPath = bootMountPoint.path;
-        console.log('using boot root path:' + bootRootPath);
+        console.log("using boot root path:" + bootRootPath);
         /*
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
