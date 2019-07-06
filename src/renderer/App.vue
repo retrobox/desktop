@@ -97,6 +97,11 @@
       logoutConfirmationModal: false
     }),
     created() {
+      if (navigator.locale != "fr") {
+        this.$i18n.locale = 'en'
+      } else {
+        this.$i18n.locale = 'fr'
+      }
       let envs = [
         process.env.API_ENDPOINT,
         process.env.WEB_ENDPOINT,
