@@ -518,9 +518,15 @@ export default {
         console.log(device.mountpoints);
         let bootMountPoint = device.mountpoints.filter(
           m => m.label === "boot"
-        )[0];
+        );
+        if (bootMountPoint.length === 0) {
+          // use first boot mount point if no mount point found with the label filter
+          bootMountPoint = device.mountpoints[0]
+        } else {
+          bootMountPoint = bootMountPoint[0]
+        }
         let bootRootPath = bootMountPoint.path;
-        console.log(bootRootPath);
+        console.log('using boot root path:' + bootRootPath);
         /*
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
