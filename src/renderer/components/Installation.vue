@@ -370,8 +370,7 @@ export default {
              console.log("finish of the image download");
              setTimeout(() => {
                 console.log('reloop on download image...')
-                this.downloadingImage = false;
-                this.extractingImage = true;
+                this.downloadingImage = true;
                 this.downloadImage();
              }, 1000)
           })
@@ -382,6 +381,7 @@ export default {
             !fs.existsSync(this.extractPath)
           ) {
             console.log("extract anyway");
+            this.downloadingImage = false;
             this.extractingImage = true;
             this.decompressImage();
           } else {
@@ -461,8 +461,7 @@ export default {
       //     }
       // );
       this.writingImage = false;
-      this.checkingImage = true;
-      this.checkingImageState.percentHuman = 100;
+      this.checkingImage = false;
       const imageWrite = require("etcher-image-write");
 
       console.log('Using device:', this.chosenDrive.device);
@@ -487,6 +486,7 @@ export default {
         console.log(state);
         if (state.type == "write") {
           this.writingImage = true;
+          this.checkingImage = false;
           this.writingImageState.percentHuman = state.percentage.toFixed(2);
         }
         if (state.type == "check") {
