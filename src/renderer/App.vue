@@ -79,6 +79,7 @@
 <script> 
   import Installation from './components/Installation.vue'
   import Login from './components/Login.vue'
+  import Axios from 'axios';
   const isElevated = require('is-elevated')
   export default {
     name: 'desktop_lab',
@@ -90,7 +91,7 @@
       isLogged: null,
       alert: false,
       isElevated: true,
-      needToBeElevated: true,
+      needToBeElevated: false,
       globalLoading: true,
       dark: false,
       logoutConfirmationModal: false
@@ -122,22 +123,41 @@
       //this.needToBeElevated = os.platform() === 'linux' || os.platform() == 'darwin'
 
       // verify if logged
-      if (localStorage.getItem('userToken') !== null) {
-        // verify validity of the token by calling account info API route
-        this.isLogged = true
-      } else {
-        this.isLogged = false
-      }
 
       isElevated().then(elevated => {
           this.isElevated = elevated
           console.log('isElevated: ' + elevated)
           if (this.needToBeElevated && !this.elevated) {
             console.warn("The application doesn't have administrator privileges!")
-          }
-          setTimeout(() => {
+            this.globalLoading = false
+          } else {
+            if (localStorage.getItem('userToken') !== null) {
+              // verify validity of the token by calling account info API route
+              Axios.get(this.$store.state.apiEndpoint + '/dashboard', {
+                headers: {
+                  Authorization: 'Bearer ' + localStorage.getItem('userToken')
+                }
+              }).then((res) => {
+                console.log(res.data)              
+                this.isLogged = true
+                this.globalLoading = false
+                // fetch consoles
+                // fetch consoles from API
+                // get serial number and token
+
+                let consoles = res.data.consoles
+              }).catch((err) => {
+                console.warn("Can't login to api")
+                console.log(err.response)
+                console.error(err)
+                this.isLogged = false
+                this.globalLoading = false
+              })
+            } else {
+              this.isLogged = false
               this.globalLoading = false
-          }, 500)
+            }
+          }
       });
     },
     methods: {

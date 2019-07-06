@@ -181,7 +181,7 @@ export default {
     extractingImage: false,
     unCompressing: false,
     imageSha256Hash:
-      "47ef1b2501d0e5002675a50b6868074e693f78829822eef64f3878487953234d",
+      "9009409a9f969b117602d85d992d90563f181a904bc3812bdd880fc493185234",
     imagePath: "dist.zip",
     extractPath: "extracted_image",
     debug: "",
@@ -189,11 +189,14 @@ export default {
     isWifiSsidCorrect: false,
     isWifiPasswordCorrect: false,
     isWifiPasswordVisible: false,
-    tmpPath: ''
+    tmpPath: '',
+    extractedImagePath: '',
+    extractedImageName: 'extracted_image.img'
   }),
   created() {
     if (process.env.TMP_PATH != undefined && process.env.TMP_PATH != null) {
-      this.tmpPath = process.TMP_PATH
+      this.tmpPath =  process.env.TMP_PATH
+      console.warn('Use a tmp path from environment variable')
     } else {
       this.tmpPath = electron.remote.app.getPath("appData") + "/retrobox-desktop";    
       //create directory if do not exist
@@ -203,7 +206,7 @@ export default {
       }
     }
 
-    console.log(this.tmpPath)
+    console.log('tmp path used:', this.tmpPath)
 
     this.imagePath = this.tmpPath + "/" + this.imagePath;
     this.extractPath = this.tmpPath + "/" + this.extractPath;
@@ -318,6 +321,7 @@ export default {
           // making digest
           s.on("end", () => {
             const hash = shasum.digest("hex");
+            console.log(hash)
             if (hash != this.imageSha256Hash) {
               // hash is diferent
               console.log("hash do not match");
@@ -338,7 +342,7 @@ export default {
     downloadImage() {
       // verify if the image already exist in the directory
 
-      let imageUrl = "https://downloads.raspberrypi.org/raspbian_lite_latest";
+      let imageUrl = "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-06-24/2019-06-20-raspbian-buster-lite.zip";
 
       this.doDownload().then(download => {
         console.log("download: " + download);
@@ -346,21 +350,31 @@ export default {
           console.log("do download");
           this.downloadingImage = true;
           console.log("downloading the zip...");
+          let writeStream = fs.createWriteStream(path.resolve(this.imagePath));
           progress(request(imageUrl), {})
             .on("progress", state => {
+              console.log(state)
               this.imageDownloadState = (state.percent * 100).toFixed(2);
             })
             .on("error", function(err) {
               console.log("error with the image download");
               console.log(err);
             })
-            .on("end", () => {
-              console.log("end of the image download");
-              this.downloadingImage = false;
-              this.extractingImage = true;
-              this.decompressImage();
+            .on('end', function(err) {
+              console.log('end of progress')
             })
-            .pipe(fs.createWriteStream(path.resolve(this.imagePath)));
+            .pipe(writeStream);
+          console.log('_processing')
+          writeStream.on('close', () => {
+             console.log('writing stream finish')
+             console.log("finish of the image download");
+             setTimeout(() => {
+                console.log('reloop on download image...')
+                this.downloadingImage = false;
+                this.extractingImage = true;
+                this.downloadImage();
+             }, 1000)
+          })
         } else {
           console.log("do not download");
           if (
@@ -377,14 +391,35 @@ export default {
       });
     },
     decompressImage() {
-      console.log("decompress...");
-      decompress(path.resolve(this.imagePath), this.extractPath, {
-        plugins: [decompressUnzip()]
-      }).then(() => {
-        this.extractingImage = false;
-        this.step = 4;
-        console.log("Files decompressed");
-      });
+      let zipPath = path.resolve(this.imagePath)
+      console.log("decompress zip of path:", zipPath);
+      this.extractedImagePath = this.tmpPath + '/' + this.extractedImageName;
+      console.log("Writing extracted image on:", this.extractedImagePath)
+
+      const yauzl = require('yauzl')
+      yauzl.open(
+        path.resolve(this.imagePath), 
+        {lazyEntries: true}, (err, zipfile) => {
+          if (err) throw err;
+          zipfile.readEntry();
+          zipfile.on("entry", (entry) => {
+            zipfile.openReadStream(entry, (err, readStream) => {
+              if (err) throw err;
+              let writeStream = fs.createWriteStream(
+                path.resolve(this.extractedImagePath)
+              );
+              readStream.on("end", function() {
+                zipfile.readEntry();
+              });
+              readStream.pipe(writeStream);
+              writeStream.on('close', () => {
+                this.extractingImage = false;
+                this.step = 4;
+                console.log("Files decompressed");
+              })
+            });
+          });
+       });
     },
     trySmth() {
       this.step = 5;
@@ -411,7 +446,8 @@ export default {
       // );
     },
     writeImage() {
-      console.log("extracting image...");
+      console.log("now extracting image...");
+      console.log("using image path:", this.extractedImagePath)
       // const sudo = require('sudo-prompt');
       // var options = {
       //     name: 'Retrobox'
@@ -429,12 +465,8 @@ export default {
       this.checkingImageState.percentHuman = 100;
       const imageWrite = require("etcher-image-write");
 
-      let extractedImagePath =
-        this.extractPath + "/" + fs.readdirSync(this.extractPath)[0];
-
-      console.log(extractedImagePath);
-      console.log(this.chosenDrive.device);
-      console.log(this.chosenDrive.size);
+      console.log('Using device:', this.chosenDrive.device);
+      console.log('With size', this.chosenDrive.size);
 
       let emitter = imageWrite.write(
         {
@@ -443,8 +475,8 @@ export default {
           size: this.chosenDrive.size
         },
         {
-          stream: fs.createReadStream(extractedImagePath),
-          size: fs.statSync(extractedImagePath).size
+          stream: fs.createReadStream(this.extractedImagePath),
+          size: fs.statSync(this.extractedImagePath).size
         },
         {
           check: true
