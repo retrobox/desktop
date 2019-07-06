@@ -191,7 +191,8 @@ export default {
     isWifiPasswordVisible: false,
     tmpPath: "",
     extractedImagePath: "",
-    extractedImageName: "extracted_image.img"
+    extractedImageName: "extracted_image.img",
+    console: null // not enabled if null
   }),
   created() {
     if (process.env.TMP_PATH != undefined && process.env.TMP_PATH != null) {
@@ -222,7 +223,13 @@ export default {
 
     this.scanTick();
   },
+  mounted () {
+    this.prepareConsole()
+  },
   watch: {
+    '$store.state.consoles': function () {
+      this.prepareConsole()
+    },
     step: function(step) {
       if (step === 1) {
         this.stopScan = false;
@@ -248,6 +255,12 @@ export default {
     }
   },
   methods: {
+    prepareConsole() {
+      // set console data
+      if (this.$store.state.consoles !== undefined && this.$store.state.consoles !== 0) {
+        this.console = this.$store.state.consoles[0]
+      }      
+    },
     fetchCountries() {
       this.loadingCountries = true;
       this.$http
@@ -562,7 +575,26 @@ network={
 
           console.log("The wifi file was saved!");
 
-          this.step = this.step + 1;
+          // generate overlay config
+          if (this.console != null) {
+            overlayConfig = {
+              id: this.console.id,
+              token: this.console.token
+            }
+
+            // write overlay config file 'overlay_config.json'
+            fs.writeFile(bootRootPath + "/overlay_config.json",
+              JSON.stringify(overlayConfig), err => {
+              if (err) {
+                return console.log(err);
+              }
+
+              console.log('Overlay config file saved!')
+              this.step = this.step + 1;
+            })
+          } else {
+            this.step = this.step + 1;
+          }
         });
       });
     }

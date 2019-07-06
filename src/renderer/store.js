@@ -7,7 +7,8 @@ export default new Vuex.Store({
     state: {    
         apiEndpoint: '',
         webEndpoint: '',
-        webSocketEndpoint: ''
+        webSocketEndpoint: '',
+        consoles: []
     },
     mutations: {
         'SET_API_ENDPOINT': function (state, endpoint) {
@@ -18,6 +19,9 @@ export default new Vuex.Store({
         },
         'SET_WEB_SOCKET_ENDPOINT': function (state, endpoint) {
             state.webSocketEndpoint = endpoint
+        },
+        'SET_CONSOLES': function (state, consoles) {
+            state.consoles = consoles
         }
     }
 })

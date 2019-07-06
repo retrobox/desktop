@@ -138,14 +138,19 @@
                   Authorization: 'Bearer ' + localStorage.getItem('userToken')
                 }
               }).then((res) => {
-                console.log(res.data)              
+                console.log(res.data)
+
                 this.isLogged = true
                 this.globalLoading = false
                 // fetch consoles
                 // fetch consoles from API
                 // get serial number and token
+                let consoles = res.data.data.consoles
+                
+                // console.log(consoles.length, 'detected!')
 
-                let consoles = res.data.consoles
+                this.$store.commit('SET_CONSOLES', consoles)
+                
               }).catch((err) => {
                 console.warn("Can't login to api")
                 console.log(err.response)
