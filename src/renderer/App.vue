@@ -3,11 +3,15 @@
     <v-app :dark="dark">
       <v-container>
         <v-layout class="mb-4 mt-4" space-between>
-            <v-img 
-              src="https://raw.githubusercontent.com/retrobox/web/master/assets/images/nav.png"
-              height="40"
-              contain />
             <div>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon color="primary" outline v-on="on" @click="switchLocale()">
+                    <v-icon>flag</v-icon>
+                  </v-btn>
+                </template>
+                <span>{{ $t('switch-locale') }}</span>
+              </v-tooltip>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <v-btn icon color="success" outline v-on="on" @click="invertColor()">
@@ -16,6 +20,12 @@
                 </template>
                 <span>{{ $t('toggle-dark-mode') }}</span>
               </v-tooltip>
+            </div>
+            <v-img 
+              src="https://raw.githubusercontent.com/retrobox/web/master/assets/images/nav.png"
+              height="40"
+              contain />
+            <div>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <v-btn icon color="info" outline v-on="on">
@@ -206,6 +216,13 @@
         localStorage.removeItem('userToken')
         this.logoutConfirmationModal = false
         this.isLogged = false
+      },
+      switchLocale() {
+        if (this.$i18n.locale === 'fr') {
+          this.$i18n.locale = 'en'
+        } else {
+          this.$i18n.locale = 'fr'
+        }
       }
     }
   }

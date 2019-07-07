@@ -16,6 +16,7 @@
     "refresh": "Actualiser",
     "continue": "Continuer",
     "previous": "Précédent",
+    "switch-locale": "Passer à l'anglais",
     "installation": {
         "choose-device": "Choissisez votre périphérique",
         "setup-wifi": "Configurer le wifi",
