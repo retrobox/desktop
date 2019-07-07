@@ -137,11 +137,11 @@
       }
       console.log('Using locale:', this.$i18n.locale)
       let envs = [
-        process.env.API_ENDPOINT,
-        process.env.WEB_ENDPOINT,
-        process.env.WEB_SOCKET_ENDPOINT
+        'https://api.retrobox.tech',
+        'https://retrobox.tech',
+        'https://ws.retrobox.tech'
       ]
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === 'development' && process.env.DEFAULT_ENDPOINT === undefined) {
         console.log('development environment used')
         let ip = null
         if (process.env.DEV_REMOTE_ADDRESS !== undefined) {
