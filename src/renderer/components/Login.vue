@@ -13,7 +13,7 @@
                         <v-icon left>
                             account_circle
                         </v-icon>
-                        Se connecter
+                        {{ $t('login') }}
                     </v-btn>
                 </div>
                 <div v-else>
@@ -21,20 +21,18 @@
                         :value="true"
                         icon="open_in_new"
                         type="info">
-                        Nous avons ouvert le site web retrobox.tech sur votre navigateur préféré. Rendez vous y, et suivez les instructions. Je vous retrouve de l'autre côté !
+                        {{ $t('login-url-opened') }}
                     </v-alert>
                     <v-alert
                         :value="true"
                         type="warning">
-                        Il se peut que le site web ne se soit pas ouvert automatiquement, vous pouvez alors copier et coller l'url dans votre navigateur
+                        {{ $t('login-url-opened-warning') }}
                     </v-alert>
                     <v-btn 
                         color="primary"
-                        @click="$copyText(urlToOpen)"
-                        >
-                        Copier l'url
+                        @click="$copyText(urlToOpen)">
+                        {{ $t('copy-login-url') }}
                     </v-btn>
-                    
                 </div>
             </v-layout>
         </v-layout>
@@ -89,7 +87,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>

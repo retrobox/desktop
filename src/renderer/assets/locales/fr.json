@@ -1,6 +1,36 @@
 {
     "locale": "fr",
-    "login": {
-        "title": "Se connecter"
+    "login": "Se connecter",
+    "must-open-as-administrator": "Vous devez ouvrir ce programme en tant qu'administrateur pour pouvoir l'utiliser",
+    "toggle-dark-mode": "Activer/Désactiver le mode sombre",
+    "help": "Accéder à l'aide",
+    "logout": "Se déconnecter",
+    "successful-login": "Vous vous êtes connecté avec succès",
+    "close": "Fermer",
+    "confirm-logout": "Voulez vous vraiment vous déconnecter ?",
+    "yes": "Oui",
+    "no": "Non",
+    "login-url-opened": "Nous avons ouvert le site web retrobox.tech sur votre navigateur préféré. Rendez vous y, et suivez les instructions. Je vous retrouve de l'autre côté !",
+    "login-url-opened-warning": "Il se peut que le site web ne se soit pas ouvert automatiquement, vous pouvez alors copier et coller l'url dans votre navigateur",
+    "copy-login-url": "Copier l'url de connection",
+    "refresh": "Actualiser",
+    "continue": "Continuer",
+    "previous": "Précédent",
+    "installation": {
+        "choose-device": "Choissisez votre périphérique",
+        "setup-wifi": "Configurer le wifi",
+        "download-image": "Télécharger l'image",
+        "write-image": "Ecrire l'image",
+        "done": "Terminé",
+        "search-device": "Recherche de périphériques...",
+        "wifi-ssid": "Ssid du réseau Wi-Fi",
+        "wifi-password": "Mot de passe du réseau Wi-Fi",
+        "select-country": "Sélectionnez votre pays",
+        "downloading-image": "Téléchargement de l'image...",
+        "extracting-image": "Extraction de l'image...",
+        "writing-image": "Ecriture de l'image...",
+        "checking-image": "Vérification de l'image",
+        "success": "Félicitation!",
+        "success-message": "Votre périphérique vient d'être flashée avec succès, vous pouvez désormais l'utiliser avec votre rétrobox"
     }
 }

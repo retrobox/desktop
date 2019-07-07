@@ -3,30 +3,53 @@
     <v-app :dark="dark">
       <v-container>
         <v-layout class="mb-4 mt-4" space-between>
-            <v-img src="https://raw.githubusercontent.com/retrobox/web/master/assets/images/nav.png" height="40" contain />
+            <v-img 
+              src="https://raw.githubusercontent.com/retrobox/web/master/assets/images/nav.png"
+              height="40"
+              contain />
             <div>
-              <v-btn icon color="success" outline @click="invertColor()">
-                <v-icon>invert_colors</v-icon>
-              </v-btn>
-              <v-btn icon color="info" outline>
-                <v-icon>help_outline</v-icon>
-              </v-btn>
-              <v-btn
-                v-if="isLogged"
-                icon color="error" outline @click="logoutConfirmationModal = true">
-                <v-icon>exit_to_app</v-icon>
-              </v-btn>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon color="success" outline v-on="on" @click="invertColor()">
+                    <v-icon>invert_colors</v-icon>
+                  </v-btn>
+                </template>
+                <span>{{ $t('toggle-dark-mode') }}</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon color="info" outline v-on="on">
+                    <v-icon>help_outline</v-icon>
+                  </v-btn>
+                </template>
+                <span>{{ $t('help') }}</span>
+              </v-tooltip>
+              <v-tooltip 
+                bottom 
+                v-if="isLogged">
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    icon color="error" outline v-on="on" @click="logoutConfirmationModal = true">
+                    <v-icon>exit_to_app</v-icon>
+                  </v-btn>
+                </template>
+                <span>{{ $t('logout') }}</span>
+              </v-tooltip>
             </div>
         </v-layout>
         <v-layout justify-center align-center py-5 my-5 v-if="globalLoading">
             <v-progress-circular indeterminate></v-progress-circular>
         </v-layout>
-        <v-layout justify-center align-center py-5 my-5 v-if="globalLoading === false && isElevated === false && needToBeElevated == true">
+        <v-layout 
+          justify-center
+          align-center
+          py-5 my-5
+          v-if="globalLoading === false && isElevated === false && needToBeElevated == true">
             <v-layout justify-center column class="text-xs-center">
                 <v-alert
                   :value="true"
                   type="error">
-                    Vous devez ouvrir ce programme en tant qu'administrateur pour pouvoir l'utiliser
+                    {{ $t('must-open-as-administrator') }}                    
                 </v-alert>    
             </v-layout>
         </v-layout>
@@ -46,12 +69,12 @@
         vertical
         :timeout="6000"
       >
-        Vous êtes maintenant connecté!
+        {{ $t('successful-login') }}
         <v-btn
           flat
           @click="alert = false"
         >
-          Ok
+          {{ $t('close') }}
         </v-btn>
       </v-snackbar>
       <v-dialog
@@ -59,15 +82,15 @@
         max-width="500px">
         <v-card>
           <v-card-title>
-            Voulez vous vraiment vous déconnecter ?
+            {{ $t('confirm-logout') }}
           </v-card-title>
           <v-card-actions>
             <v-btn flat @click="logout()" color="error">
-              Oui
+              {{ $t('yes') }}
             </v-btn>
             <v-spacer />
             <v-btn flat @click="logoutConfirmationModal = false" color="success">
-              Non
+              {{ $t('no') }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -97,11 +120,12 @@
       logoutConfirmationModal: false
     }),
     created() {
-      if (navigator.locale != "fr") {
-        this.$i18n.locale = 'en'
-      } else {
+      if (navigator.language === "fr") {
         this.$i18n.locale = 'fr'
+      } else {
+        this.$i18n.locale = 'en'
       }
+      console.log('Using locale:', this.$i18n.locale)
       let envs = [
         process.env.API_ENDPOINT,
         process.env.WEB_ENDPOINT,
@@ -186,6 +210,3 @@
     }
   }
 </script>
-
-<style>
-</style>

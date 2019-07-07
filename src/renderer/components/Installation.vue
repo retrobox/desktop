@@ -9,25 +9,26 @@
     <!-- <v-btn color="success" @click="trySmth()">Run script</v-btn> -->
     <v-stepper v-model="step" style="width:100%">
       <v-stepper-header>
-        <v-stepper-step :complete="step > 1" step="1">Choose your device</v-stepper-step>
-
+        <v-stepper-step :complete="step > 1" step="1">
+          {{ $t('installation.choose-device') }}
+        </v-stepper-step>
         <v-divider></v-divider>
-
-        <v-stepper-step :complete="step > 2" step="2">Wifi setup</v-stepper-step>
-
+        <v-stepper-step :complete="step > 2" step="2">
+          {{ $t('installation.setup-wifi') }}
+        </v-stepper-step>
         <v-divider></v-divider>
-
-        <v-stepper-step :complete="step > 3" step="3">Download image</v-stepper-step>
-
+        <v-stepper-step :complete="step > 3" step="3">
+          {{ $t('installation.download-image') }}
+        </v-stepper-step>
         <v-divider></v-divider>
-
-        <v-stepper-step :complete="step > 4" step="4">Write image</v-stepper-step>
-
+        <v-stepper-step :complete="step > 4" step="4">
+          {{ $t('installation.write-image') }}
+        </v-stepper-step>
         <v-divider></v-divider>
-
-        <v-stepper-step step="5">Done</v-stepper-step>
+        <v-stepper-step step="5">
+          {{ $t('installation.done') }}
+        </v-stepper-step>
       </v-stepper-header>
-
       <v-stepper-items>
         <v-stepper-content step="1">
           <v-card class="mb-4">
@@ -39,35 +40,38 @@
                 v-if="drives.length != 0"
               >
                 <v-list subheader>
-                  <v-subheader>Choose your device</v-subheader>
+                  <v-subheader>{{ $t('installation.choose-device') }}</v-subheader>
                   <v-list-tile v-for="(drive, index) in drives" :key="index">
                     <v-radio :label="drive.humanName" :value="drive"></v-radio>
                   </v-list-tile>
                 </v-list>
               </v-radio-group>
               <div v-else>
-                <v-layout justify-center class="py-2">Searching for devices...</v-layout>
+                <v-layout justify-center class="py-2">
+                  {{ $t('installation.search-device') }}
+                </v-layout>
               </div>
             </v-card-text>
           </v-card>
-
           <v-layout justify-end>
             <v-btn outline color="success" @click="scanTick(true)">
-              <v-icon left>refresh</v-icon>Refresh
+              <v-icon left>refresh</v-icon>
+              {{ $t('refresh') }}
             </v-btn>
             <v-spacer />
-            <v-btn color="primary" @click="step = 2" :disabled="chosenDrive == 0">Continue</v-btn>
+            <v-btn color="primary" @click="step = 2" :disabled="chosenDrive == 0">
+              {{ $t('continue') }}
+            </v-btn>
           </v-layout>
         </v-stepper-content>
-
         <v-stepper-content step="2">
           <v-card class="mb-4">
-            <v-card-title>Setup your wifi network</v-card-title>
+            <v-card-title>{{ $t('installation.setup-wifi') }}</v-card-title>
             <v-card-text>
               <v-form>
-                <v-text-field label="Wifi SSID" v-model="wifiSsid" autofocus max="32" />
+                <v-text-field :label="$t('installation.wifi-ssid')" v-model="wifiSsid" autofocus max="32" />
                 <v-text-field
-                  label="Wifi Password"
+                  :label="$t('installation.wifi-password')"
                   v-model="wifiPassword"
                   min="6"
                   :append-icon="isWifiPasswordVisible ? 'visibility_off' : 'visibility'"
@@ -78,7 +82,7 @@
                   v-model="country"
                   :items="countries"
                   menu-props="auto"
-                  label="Select your country"
+                  :label="$t('installation.select-country')"
                   hide-details
                   prepend-icon="map"
                   :loading="loadingCountries"
@@ -87,38 +91,43 @@
               </v-form>
             </v-card-text>
           </v-card>
-
           <v-layout justify-space-between>
-            <v-btn outline @click="step = 1">Previous</v-btn>
+            <v-btn outline @click="step = 1">
+              {{ $t('previous') }}
+            </v-btn>
             <v-btn
               color="primary"
               @click="step = 3"
-              :disabled="!(isWifiPasswordCorrect && isWifiSsidCorrect && country != '')"
-            >Continue</v-btn>
+              :disabled="!(isWifiPasswordCorrect && isWifiSsidCorrect && country != '')">
+              {{ $t('continue') }}
+            </v-btn>
           </v-layout>
         </v-stepper-content>
-
         <v-stepper-content step="3">
           <v-progress-linear v-if="downloadingImage" v-model="imageDownloadState"></v-progress-linear>
           <v-progress-linear v-else indeterminate></v-progress-linear>
-
           <v-layout justify-center align-center class="pt-2">
-            <span v-if="downloadingImage">Downloading image... ({{ imageDownloadState }} %)</span>
-            <span v-if="extractingImage">Extracting image...</span>
+            <span v-if="downloadingImage">
+              {{ $t('installation.downloading-image') }} ({{ imageDownloadState }} %)
+            </span>
+            <span v-if="extractingImage">
+              {{ $t('installation.extracting-image') }}
+            </span>
           </v-layout>
         </v-stepper-content>
-
         <v-stepper-content step="4">
           <v-progress-linear v-if="writingImage" v-model="writingImageState.percentHuman"></v-progress-linear>
           <v-progress-linear v-if="checkingImage" v-model="checkingImageState.percentHuman"></v-progress-linear>
           <v-progress-linear v-if="!checkingImage && !writingImage" indeterminate></v-progress-linear>
-
           <v-layout justify-center align-center class="pt-2">
-            <span v-if="writingImage">Writing image... ({{ writingImageState.percentHuman }} %)</span>
-            <span v-if="checkingImage">Checking image... ({{ checkingImageState.percentHuman }} %)</span>
+            <span v-if="writingImage">
+              {{ $t('installation.writing-image') }} ({{ writingImageState.percentHuman }} %)
+            </span>
+            <span v-if="checkingImage">
+              {{ $t('installation.checking-image') }} ({{ checkingImageState.percentHuman }} %)
+            </span>
           </v-layout>
         </v-stepper-content>
-
         <v-stepper-content step="5">
           <v-layout justify-center wrap align-center fill-height class="text-xs-center">
             <v-flex xs12 md4>
@@ -128,10 +137,12 @@
             </v-flex>
             <v-flex xs12 md8>
               <v-layout fill-height justify-center align-center column class="py-3">
-                <div class="display-2">Success!</div>
-                <div
-                  class="headline"
-                >Your card has been successfuly flashed, you can now use it with your retrobox console!</div>
+                <div class="display-2">
+                  {{ $t('installation.success') }}
+                </div>
+                <div class="headline">
+                  {{ $t('installation.success-message') }}
+                </div>
               </v-layout>
             </v-flex>
           </v-layout>

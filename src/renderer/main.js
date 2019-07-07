@@ -16,7 +16,7 @@ Vue.use(VueClipboard)
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({
-  locale: 'fr',
+  locale: 'en',
   messages: {
     fr: require('./assets/locales/fr.json'),
     en: require('./assets/locales/en.json')
