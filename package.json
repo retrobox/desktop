@@ -1,6 +1,6 @@
 {
   "name": "@retrobox/desktop",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Thingmill <contact@thingmill.fr>",
   "description": "The desktop app of the retrobox project",
   "license": "MIT",
