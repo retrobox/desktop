@@ -1,6 +1,36 @@
 {
     "locale": "en",
-    "login": {
-        "title": "Login in"
+    "login": "Login in",
+    "must-open-as-administrator": "You must open this programm as an administrator to use it",
+    "toggle-dark-mode": "Toggle dark mode",
+    "help": "Access to help",
+    "logout": "Log out",
+    "successful-login": "You just log in!",
+    "close": "Close",
+    "confirm-logout": "Do you really want to logout ?",
+    "yes": "Yes",
+    "no": "No",
+    "login-url-opened": "So we try to open a new web page in your favorite browser in order to log in, see you on the other side!",
+    "login-url-opened-warning": "If we didn't achieve to open your browser, you can still copy paste the log in url...",
+    "copy-login-url": "Copy the log in url",
+    "refresh": "Refresh",
+    "continue": "Next",
+    "previous": "Previous",
+    "installation": {
+        "choose-device": "Choose device",
+        "setup-wifi": "Setup wifi",
+        "download-image": "Download image",
+        "write-image": "Write image",
+        "done": "Finish",
+        "search-device": "Searching for devices...",
+        "wifi-ssid": "Wi-Fi SSID",
+        "wifi-password": "Wi-Fi password",
+        "select-country": "Select a country",
+        "downloading-image": "Downloading image...",
+        "extracting-image": "Extracting image...",
+        "writing-image": "Writing image...",
+        "checking-image": "Checking image...",
+        "success": "Success!",
+        "success-message": "We just finished to write the image on your device, so you can use it now with your retrobox!"
     }
 }
