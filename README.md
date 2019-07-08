@@ -1,7 +1,10 @@
-
 # Desktop electron app
 
-Build with electron-vue
+Build with electron-vue, available in french and english (at this time).
+
+### Preview :
+
+![alt](https://static.retrobox.tech/img/app/Retrobox_Desktop_App_euyZshYEtp.png)
 
 ### Dependencies
 
@@ -15,6 +18,16 @@ Build with electron-vue
 - request
 - request-progress
 - axios
+- crypto
+- electron-sudo
+- is-admin
+- is-elevated
+- socket.io-client
+- sudo-prompt
+- vue-clipboard2
+- vue-i18n
+- vuex
+- yauzl
 
 #### Build Setup (linux)
 
@@ -37,7 +50,7 @@ npm run build
 
 Environment needed (or recommended) :
 
-1. VS Enterprise 2015 with all components (or just community version)
+1. VS Enterprise 2015 with **all components** (or just community version) (And restart your computer after the installation)
 2. Python 2.7 (and ONLY this version)
 3. Npm v6.4.1 (or newer)
 4. Node v10.15.0 (or newer)
