@@ -11,7 +11,7 @@
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
     "dev": "node .electron-vue/dev-runner.js",
-    "dev:default": "cross-env WEB_ENDPOINT=http://localhost:3000 API_ENDPOINT=http://localhost:8000 WEB_SOCKET_ENDPOINT=http://localhost:3008 node .electron-vue/dev-runner.js",
+    "dev:default": "cross-env DEV_REMOTE_ADDRESS=localhost node .electron-vue/dev-runner.js",
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",

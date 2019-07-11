@@ -150,9 +150,9 @@
         } else {
           ip = require('network-address')()
         }
-        envs[0] = envs[0] === undefined ? 'http://' + ip + ':8000' : envs[0]
-        envs[1] = envs[1] === undefined ? 'http://' + ip + ':3000' : envs[1]
-        envs[2] = envs[2] === undefined ? 'http://' + ip + ':3008' : envs[2]
+        envs[0] = envs[0] === undefined || ip !== null ? 'http://' + ip + ':8000' : envs[0]
+        envs[1] = envs[1] === undefined || ip !== null ? 'http://' + ip + ':3000' : envs[1]
+        envs[2] = envs[2] === undefined || ip !== null ? 'http://' + ip + ':3008' : envs[2]
       } 
       console.log('env endpoints used:', envs)
       this.$store.commit('SET_API_ENDPOINT', envs[0])
@@ -162,7 +162,6 @@
       //this.needToBeElevated = os.platform() === 'linux' || os.platform() == 'darwin'
 
       // verify if logged
-
       isElevated().then(elevated => {
           this.isElevated = elevated
           console.log('isElevated: ' + elevated)
