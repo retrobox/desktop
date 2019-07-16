@@ -28,7 +28,7 @@
             <div>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                  <v-btn icon color="info" outline v-on="on">
+                  <v-btn icon color="info" outline v-on="on" @click="openHelp()">
                     <v-icon>help_outline</v-icon>
                   </v-btn>
                 </template>
@@ -114,6 +114,7 @@
   import Login from './components/Login.vue'
   import Axios from 'axios';
   const isElevated = require('is-elevated')
+  const { shell } = require('electron')
   export default {
     name: 'desktop_lab',
     components: {
@@ -222,6 +223,9 @@
         } else {
           this.$i18n.locale = 'fr'
         }
+      },
+      openHelp() {
+        shell.openExternal('https://retrobox.tech/contact-us')
       }
     }
   }
