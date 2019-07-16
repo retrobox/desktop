@@ -79,7 +79,7 @@
                   :type="isWifiPasswordVisible ? 'text' : 'password'"
                 />
                   <v-layout>
-                    <v-flex xs12 md5 pr-2>
+                    <v-flex xs12 md6 pr-2>
                       <v-autocomplete
                         v-model="country"
                         :items="countries"
@@ -91,7 +91,7 @@
                         single-line
                       ></v-autocomplete>
                     </v-flex>
-                    <v-flex xs12 md5 pl-2>
+                    <v-flex xs12 md6 pl-2>
                       <v-select
                         item-text="name"
                         item-value="value"
