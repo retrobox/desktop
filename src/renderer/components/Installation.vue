@@ -78,16 +78,30 @@
                   v-on:click:append="isWifiPasswordVisible = !isWifiPasswordVisible"
                   :type="isWifiPasswordVisible ? 'text' : 'password'"
                 />
-                <v-autocomplete
-                  v-model="country"
-                  :items="countries"
-                  menu-props="auto"
-                  :label="$t('installation.select-country')"
-                  hide-details
-                  prepend-icon="map"
-                  :loading="loadingCountries"
-                  single-line
-                ></v-autocomplete>
+                  <v-layout>
+                    <v-flex xs12 md5 pr-2>
+                      <v-autocomplete
+                        v-model="country"
+                        :items="countries"
+                        menu-props="auto"
+                        :label="$t('installation.select-country')"
+                        hide-details
+                        prepend-icon="map"
+                        :loading="loadingCountries"
+                        single-line
+                      ></v-autocomplete>
+                    </v-flex>
+                    <v-flex xs12 md5 pl-2>
+                      <v-select
+                        item-text="name"
+                        item-value="value"
+                        :label="'Wifi Type'"
+                        return-object
+                        :items="wifiTypes"
+                        v-model="wifiType">
+                      </v-select>
+                    </v-flex>
+                  </v-layout>                
               </v-form>
             </v-card-text>
           </v-card>
@@ -169,42 +183,50 @@ const decompressUnzip = require("decompress-unzip");
 
 export default {
   name: "Installation",
-  data: () => ({
-    stopScan: false,
-    step: 1,
-    chosenDrive: 0,
-    drives: [],
-    wifiPassword: "",
-    wifiSsid: "",
-    country: "",
-    loadingCountries: false,
-    countries: [],
-    imageDownloadState: "0.00",
-    writingImage: false,
-    writingImageState: {
-      percentHuman: "0.00"
-    },
-    checkingImage: false,
-    checkingImageState: {
-      percentHuman: "0.00"
-    },
-    downloadingImage: false,
-    extractingImage: false,
-    unCompressing: false,
-    imageSha256Hash:
-      "9009409a9f969b117602d85d992d90563f181a904bc3812bdd880fc493185234",
-    imagePath: "dist.zip",
-    extractPath: "extracted_image",
-    debug: "",
-    rawDrivesLenght: -1,
-    isWifiSsidCorrect: false,
-    isWifiPasswordCorrect: false,
-    isWifiPasswordVisible: false,
-    tmpPath: "",
-    extractedImagePath: "",
-    extractedImageName: "extracted_image.img",
-    console: null // not enabled if null
-  }),
+  data: () => {
+    let wifiTypes = [      
+      {name: "WPA/WPA2 PSK", value: "WPA-PSK"},
+      {name: "WEP", value: "WEP"}
+    ]
+    return {
+      stopScan: false,
+      step: 1,
+      chosenDrive: 0,
+      drives: [],
+      wifiPassword: "",
+      wifiSsid: "",
+      country: "",
+      wifiTypes,
+      wifiType: wifiTypes[0],
+      loadingCountries: false,
+      countries: [],
+      imageDownloadState: "0.00",
+      writingImage: false,
+      writingImageState: {
+        percentHuman: "0.00"
+      },
+      checkingImage: false,
+      checkingImageState: {
+        percentHuman: "0.00"
+      },
+      downloadingImage: false,
+      extractingImage: false,
+      unCompressing: false,
+      imageSha256Hash:
+        "9009409a9f969b117602d85d992d90563f181a904bc3812bdd880fc493185234",
+      imagePath: "dist.zip",
+      extractPath: "extracted_image",
+      debug: "",
+      rawDrivesLenght: -1,
+      isWifiSsidCorrect: false,
+      isWifiPasswordCorrect: false,
+      isWifiPasswordVisible: false,
+      tmpPath: "",
+      extractedImagePath: "",
+      extractedImageName: "extracted_image.img",
+      console: null // not enabled if null
+    }
+  },
   created() {
     if (process.env.TMP_PATH != undefined && process.env.TMP_PATH != null) {
       this.tmpPath = process.env.TMP_PATH;
@@ -534,6 +556,32 @@ export default {
         this.onImageWrote();
       });
     },
+    generateWpaSupplicant() {
+      /*
+      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+      update_config=1
+      country=«your_ISO-3166-1_two-letter_country_code»
+
+      network={
+          ssid="«your_SSID»"
+          psk="«your_PSK»"
+          key_mgmt=WPA-PSK
+      }
+      */
+
+      let lines =
+        "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev \n";
+      lines += "update_config=1\n";
+      lines += "country=" + this.country + "\n";
+      lines += "\n";
+      lines += "network={\n";
+      lines += '  ssid="' + this.wifiSsid + '"\n';
+      lines += '  psk="' + this.wifiPassword + '"\n';
+      lines += '  key_mgmt="' + this.wifiType.value + '"\n';
+      lines += "}\n";
+
+      return lines;
+    },
     onImageWrote() {
       this.checkingImage = false;
       console.log("onImageWrote: writing file on the device");
@@ -553,29 +601,8 @@ export default {
         }
         let bootRootPath = bootMountPoint.path;
         console.log("using boot root path:" + bootRootPath);
-        /*
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=«your_ISO-3166-1_two-letter_country_code»
-
-network={
-    ssid="«your_SSID»"
-    psk="«your_PSK»"
-    key_mgmt=WPA-PSK
-}
-                    */
-
-        let lines =
-          "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev \n";
-        lines += "update_config=1\n";
-        lines += "country=" + this.country + "\n";
-        lines += "\n";
-        lines += "network={\n";
-        lines += '  ssid="' + this.wifiSsid + '"\n';
-        lines += '  psk="' + this.wifiPassword + '"\n';
-        lines += '  key_mgmt="' + "WPA-PSK" + '"\n';
-        lines += "}\n";
-
+        
+        let lines = this.generateWpaSupplicant()
         console.log(lines);
 
         // write the wifi file on the device
