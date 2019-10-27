@@ -35,7 +35,7 @@
             v-if="drives.length != 0"
             type="warning"
             :value="true">
-            Make sure to select the right device as all of its content will be erase while writing the image
+            {{ $t('installation.device-warning') }}
           </v-alert>
           <v-card class="mb-4">
             <v-card-text>
