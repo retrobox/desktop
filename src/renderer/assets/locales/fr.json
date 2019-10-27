@@ -17,7 +17,19 @@
     "continue": "Continuer",
     "previous": "Précédent",
     "switch-locale": "Passer à l'anglais",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "submit": "Valider",
     "installation": {
+        "console-selection": {
+            "title": "Nous ne pouvons pas dire quelle console vous voulez installer...",
+            "description": "Nous constatons que vous possédez plus d'une console, nous voulons donc savoir dans quelle console voulez vous mettre la carte qu'on va flasher.",
+            "choose": "Choisissez une console",
+            "console-id": "Console N° ",
+            "bought-at": "Acheté {date}",
+            "never-booted": "Jamais allumé",
+            "booted-at": "Allumé pour la première fois {date}"
+        },
         "choose-device": "Choissisez votre périphérique",
         "device-warning": "Assurez-vous de sélectionner le bon périphérique car tout son contenu sera effacé lors de l'écriture de l'image.",
         "setup-wifi": "Configurer le wifi",
@@ -30,9 +42,7 @@
         "select-country": "Sélectionnez votre pays",
         "erase-disk-confirmation": {
             "title": "Petit avertissement avant de commencer",
-            "description": "En cliquant sur ce button vous allez lancer le processus de téléchargement de l'image, de son extraction et enfin d'écriture sur le disque choisi à la première étape. Ces 3 processus vont se suivre sans demander d'acton humaine. Nous voulons vous rappeler que toute les données sur le disque choisi vont être écrasées afin d'écrire l'image retrobox.",
-            "cancel": "Annuler",
-            "confirm": "Confirmer"
+            "description": "En cliquant sur ce button vous allez lancer le processus de téléchargement de l'image, de son extraction et enfin d'écriture sur le disque choisi à la première étape. Ces 3 processus vont se suivre sans demander d'acton humaine. Nous voulons vous rappeler que toute les données sur le disque choisi vont être écrasées afin d'écrire l'image retrobox."
         },
         "downloading-image": "Téléchargement de l'image...",
         "extracting-image": "Extraction de l'image...",

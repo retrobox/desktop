@@ -17,7 +17,19 @@
     "continue": "Next",
     "previous": "Previous",
     "switch-locale": "Switch to french",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "submit": "Submit",
     "installation": {
+        "console-selection": {
+            "title": "We can't tell which console you are talking about...",
+            "description": "Basically we detected that you own more than one console, so we want to known which console you want to put the card that you will write...",
+            "choose": "Choose a console",
+            "console-id": "Console #",
+            "bought-at": "Bought {date}",
+            "never-booted": "Never booted",
+            "booted-at": "First botted {date}"
+        },
         "choose-device": "Choose device",
         "device-warning": "Make sure to select the right device as all of its content will be erase while writing the image",
         "setup-wifi": "Setup wifi",
@@ -30,9 +42,7 @@
         "select-country": "Select a country",
         "erase-disk-confirmation": {
             "title": "A little warning before carry on...",
-            "description": "By clicking on the confirm button, you will launch the process of image download, extraction and write on the selected disk. We want to remember you that this process will erase all existing data on the selected disk.",
-            "cancel": "Cancel",
-            "confirm": "Confirm"
+            "description": "By clicking on the confirm button, you will launch the process of image download, extraction and write on the selected disk. We want to remember you that this process will erase all existing data on the selected disk."
         },
         "downloading-image": "Downloading image...",
         "extracting-image": "Extracting image...",

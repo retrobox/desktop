@@ -181,11 +181,71 @@
         </v-card-text>
         <v-card-actions>
           <v-btn flat @click="eraseDiskConfirmationModal = false" color="error">
-            {{ $t('installation.erase-disk-confirmation.cancel') }}
+            {{ $t('cancel') }}
           </v-btn>
           <v-spacer />
           <v-btn @click="step = 3" flat color="primary">
-            {{ $t('installation.erase-disk-confirmation.confirm') }}
+            {{ $t('confirm') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      persistent
+      v-model="consoleSelectionModal"
+      max-width="500px">
+      <v-card>
+        <v-card-title>
+          {{ $t('installation.console-selection.title') }}
+        </v-card-title>
+        <v-card-text>
+          <p>
+            {{ $t('installation.console-selection.description') }}
+          </p>
+          <v-list subheader two-line>
+            <v-subheader>
+              {{ $t('installation.console-selection.choose') }}
+            </v-subheader>
+            <v-divider />
+            <template v-for="_console in $store.state.consoles">
+              <v-list-tile 
+                ripple
+                :key="_console.id"
+                :disabled="selectedConsoleId === _console.id"
+                @click="selectConsole(_console)">
+                <v-list-tile-avatar>
+                  <v-icon v-if="selectedConsoleId === _console.id" color="success">check_circle</v-icon>
+                  <v-icon v-else>videogame_asset</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title>
+                    {{ $t('installation.console-selection.console-id') }}{{ _console.id }}
+                  </v-list-tile-title>
+                  <v-list-tile-sub-title>
+                    <span>
+                      {{ $t('installation.console-selection.bought-at', { date: _console.created_at }) }};
+                    </span>
+                    <span v-if="_console.first_boot_at === null">
+                      {{ $t('installation.console-selection.never-booted') }}
+                    </span>
+                    <span v-if="_console.first_boot_at !== null">
+                      {{ $t('installation.console-selection.booted-at', { date: _console.first_boot_at }) }}
+                    </span>
+                  </v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-divider :key="_console.id + '_divider'" />
+            </template>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            :disabled="selectedConsoleId === null"
+            @click="consoleSelectionModal = false"
+            flat
+            color="primary">
+            {{ $t('submit') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -252,7 +312,9 @@ export default {
       extractedImagePath: "",
       extractedImageName: "extracted_image.img",
       console: null, // not enabled if null,
-      eraseDiskConfirmationModal: false
+      eraseDiskConfirmationModal: false,
+      consoleSelectionModal: false,
+      selectedConsoleId: null
     }
   },
   created() {
@@ -302,7 +364,7 @@ export default {
         this.fetchCountries();
       }
       if (step === 3) {
-        // add confirmation modal
+        // close the erase disk confirmation modal
         this.eraseDiskConfirmationModal = false;
         this.downloadImage()
       }
@@ -320,10 +382,21 @@ export default {
   methods: {
     prepareConsole() {
       // set console data
-      // in the case of the user having only one console, we set it as the console directly
-      if (this.$store.state.consoles !== undefined && this.$store.state.consoles === 1) {
-        this.console = this.$store.state.consoles[0]
-      }      
+      if (this.$store.state.consoles !== undefined) {
+        if (this.$store.state.consoles.length === 1) {
+          // in the case of the user having only one console, we set it as the console directly
+          this.console = this.$store.state.consoles[0]
+        }
+        this.consoleSelectionModal = true
+        if (this.$store.state.consoles.length > 1) {
+          // in the case of the user having more than one console, we will show up a selection modal (that is a special case)
+          this.consoleSelectionModal = true
+        }
+      }
+    },
+    selectConsole(_console) {
+      this.selectedConsoleId = _console.id
+      this.console = _console
     },
     fetchCountries() {
       this.loadingCountries = true;

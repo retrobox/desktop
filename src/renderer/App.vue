@@ -112,7 +112,8 @@
 <script> 
   import Installation from './components/Installation.vue'
   import Login from './components/Login.vue'
-  import Axios from 'axios';
+  import Axios from 'axios'
+  import moment from 'moment'
   const isElevated = require('is-elevated')
   const { shell } = require('electron')
   export default {
@@ -131,6 +132,7 @@
       logoutConfirmationModal: false
     }),
     created() {
+      console.log("navigator language detected: " + navigator.language)
       if (navigator.language === "fr") {
         this.$i18n.locale = 'fr'
       } else {
@@ -184,12 +186,20 @@
                 // fetch consoles
                 // fetch consoles from API
                 // get serial number and token
-                let consoles = res.data.data.consoles
+                moment.locale(this.$i18n.locale)
+                let consoles = res.data.data.consoles.map(item => {
+                  if (item.created_at !== null) {
+                    item.created_at = moment(item.created_at).fromNow()
+                  }
+                  if (item.first_boot_at !== null) {
+                    item.first_boot_at = moment(item.first_boot_at).fromNow()
+                  }
+                  return item
+                })
                 
-                // console.log(consoles.length, 'detected!')
+                console.log(consoles.length + ' consoles detected!')
 
                 this.$store.commit('SET_CONSOLES', consoles)
-                
               }).catch((err) => {
                 console.warn("Can't login to api")
                 console.log(err.response)
