@@ -19,6 +19,7 @@
     "switch-locale": "Switch to french",
     "installation": {
         "choose-device": "Choose device",
+        "device-warning": "Make sure to select the right device as all of its content will be erase while writing the image",
         "setup-wifi": "Setup wifi",
         "download-image": "Download image",
         "write-image": "Write image",

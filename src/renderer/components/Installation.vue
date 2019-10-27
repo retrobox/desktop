@@ -31,6 +31,12 @@
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content step="1">
+          <v-alert
+            v-if="drives.length != 0"
+            type="warning"
+            :value="true">
+            Make sure to select the right device as all of its content will be erase while writing the image
+          </v-alert>
           <v-card class="mb-4">
             <v-card-text>
               <v-radio-group

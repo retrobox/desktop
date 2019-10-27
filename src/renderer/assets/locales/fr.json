@@ -19,6 +19,7 @@
     "switch-locale": "Passer à l'anglais",
     "installation": {
         "choose-device": "Choissisez votre périphérique",
+        "device-warning": "Assurez-vous de sélectionner le bon périphérique car tout son contenu sera effacé lors de l'écriture de l'image.",
         "setup-wifi": "Configurer le wifi",
         "download-image": "Télécharger l'image",
         "write-image": "Ecrire l'image",
