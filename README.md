@@ -8,26 +8,18 @@ Build with electron-vue, available in french and english (at this time).
 
 ### Dependencies
 
-- vue
-- vuetify
-- drivelist
-- etcher-image-write
-- decompress
-- decompress-unzip
-- filesize
-- request
-- request-progress
-- axios
-- crypto
-- electron-sudo
-- is-admin
-- is-elevated
-- socket.io-client
-- sudo-prompt
-- vue-clipboard2
-- vue-i18n
-- vuex
-- yauzl
+| See in | [package.json](https://github.com/retrobox/desktop/blob/master/package.json) |
+|--|--|
+| [vue](https://www.npmjs.com/package/vue) | [crypto](https://www.npmjs.com/package/crypto) |
+| [vuetify](https://www.npmjs.com/package/vuetify) | [electron-sudo](https://www.npmjs.com/package/electron-sudo) |
+| [drivelist](https://www.npmjs.com/package/drivelist) | [is-admin](https://www.npmjs.com/package/is-admin) |
+| [etcher-image-write](https://www.npmjs.com/package/etcher-image-write) | [is-elevated](https://www.npmjs.com/package/is-elevated) |
+| [decompress](https://www.npmjs.com/package/decompress) | [socket.io-client](https://www.npmjs.com/package/socket.io-client) |
+| [decompress-unzip](https://www.npmjs.com/package/decompress-unzip) | [sudo-prompt](https://www.npmjs.com/package/sudo-prompt) |
+| [filesize](https://www.npmjs.com/package/filesize) | [vue-clipboard2](https://www.npmjs.com/package/vue-clipboard2) |
+| [request](https://www.npmjs.com/package/request)| [vue-i18n](https://www.npmjs.com/package/vue-i18n) |
+| [request-progress](https://www.npmjs.com/package/request-progress) | [vuex](https://www.npmjs.com/package/vuex) |
+| [axios](https://www.npmjs.com/package/axios) | [yauzl](https://www.npmjs.com/package/yauzl)  |
 
 #### Build Setup (linux)
 
