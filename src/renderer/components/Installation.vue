@@ -388,7 +388,6 @@ export default {
           // in the case of the user having only one console, we set it as the console directly
           this.console = this.$store.state.consoles[0]
         }
-        this.consoleSelectionModal = true
         if (this.$store.state.consoles.length > 1) {
           // in the case of the user having more than one console, we will show up a selection modal (that is a special case)
           this.consoleSelectionModal = true
