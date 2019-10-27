@@ -177,6 +177,7 @@
           <v-btn flat @click="eraseDiskConfirmationModal = false" color="error">
             {{ $t('installation.erase-disk-confirmation.cancel') }}
           </v-btn>
+          <v-spacer />
           <v-btn @click="step = 3" flat color="primary">
             {{ $t('installation.erase-disk-confirmation.confirm') }}
           </v-btn>
