@@ -4,13 +4,18 @@ import Vue from 'vue'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-    state: {    
+    state: {
+        title: '',
         apiEndpoint: '',
         webEndpoint: '',
         webSocketEndpoint: '',
         consoles: []
     },
     mutations: {
+        'SET_TITLE': function (state, title) {
+            state.title = title
+            window.document.title = title + " | RetroBox"
+        },
         'SET_API_ENDPOINT': function (state, endpoint) {
             state.apiEndpoint = endpoint
         },

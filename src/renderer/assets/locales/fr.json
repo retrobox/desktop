@@ -21,6 +21,7 @@
     "confirm": "Confirmer",
     "submit": "Valider",
     "installation": {
+        "title": "Flasher votre carte SD",
         "console-selection": {
             "title": "Nous ne pouvons pas dire quelle console vous voulez installer...",
             "description": "Nous constatons que vous possédez plus d'une console, nous voulons donc savoir dans quelle console voulez vous mettre la carte qu'on va flasher.",

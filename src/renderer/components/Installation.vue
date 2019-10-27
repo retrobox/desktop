@@ -348,6 +348,7 @@ export default {
   },
   mounted () {
     this.prepareConsole()
+    this.$store.commit('SET_TITLE', this.$i18n.t('installation.title'))
   },
   watch: {
     '$store.state.consoles': function () {

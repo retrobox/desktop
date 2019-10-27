@@ -21,6 +21,7 @@
     "confirm": "Confirm",
     "submit": "Submit",
     "installation": {
+        "title": "Flash your SD card",
         "console-selection": {
             "title": "We can't tell which console you are talking about...",
             "description": "Basically we detected that you own more than one console, so we want to known which console you want to put the card that you will write...",

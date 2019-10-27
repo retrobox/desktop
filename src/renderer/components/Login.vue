@@ -50,7 +50,8 @@ export default {
         loading: false,
         urlToOpen: ''
     }),
-    created () {   
+    mounted() {
+        this.$store.commit('SET_TITLE', this.$i18n.t('login'))
     },
     methods: {
         login: function () {
