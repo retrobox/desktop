@@ -27,6 +27,12 @@
         "wifi-ssid": "SSID du réseau Wi-Fi",
         "wifi-password": "Mot de passe du réseau Wi-Fi",
         "select-country": "Sélectionnez votre pays",
+        "erase-disk-confirmation": {
+            "title": "Petit avertissement avant de commencer",
+            "description": "En cliquant sur ce button vous allez lancer le processus de téléchargement de l'image, de son extraction et enfin d'écriture sur le disque choisi à la première étape. Ces 3 processus vont se suivre sans demander d'acton humaine. Nous voulons vous rappeler que toute les données sur le disque choisi vont être écrasés afin d'écrire l'image retrobox.",
+            "cancel": "Annuler",
+            "confirm": "Confirmer"
+        },
         "downloading-image": "Téléchargement de l'image...",
         "extracting-image": "Extraction de l'image...",
         "writing-image": "Ecriture de l'image...",

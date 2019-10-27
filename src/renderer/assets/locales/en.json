@@ -27,6 +27,12 @@
         "wifi-ssid": "Wi-Fi SSID",
         "wifi-password": "Wi-Fi password",
         "select-country": "Select a country",
+        "erase-disk-confirmation": {
+            "title": "A little warning before carry on...",
+            "description": "By clicking on the confirm button, you will launch the process of image download, extraction and write on the selected disk. We want to remember you that this process will erase all existing data on the selected disk.",
+            "cancel": "Cancel",
+            "confirm": "Confirm"
+        },
         "downloading-image": "Downloading image...",
         "extracting-image": "Extracting image...",
         "writing-image": "Writing image...",

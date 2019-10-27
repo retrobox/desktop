@@ -111,7 +111,7 @@
             </v-btn>
             <v-btn
               color="primary"
-              @click="step = 3"
+              @click="eraseDiskConfirmationModal = true"
               :disabled="!(isWifiPasswordCorrect && isWifiSsidCorrect && country != '')">
               {{ $t('continue') }}
             </v-btn>
@@ -163,6 +163,26 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
+    <v-dialog
+      v-model="eraseDiskConfirmationModal"
+      max-width="500px">
+      <v-card>
+        <v-card-title>
+          {{ $t('installation.erase-disk-confirmation.title') }}
+        </v-card-title>
+        <v-card-text>
+          {{ $t('installation.erase-disk-confirmation.description') }}
+        </v-card-text>
+        <v-card-actions>
+          <v-btn flat @click="eraseDiskConfirmationModal = false" color="error">
+            {{ $t('installation.erase-disk-confirmation.cancel') }}
+          </v-btn>
+          <v-btn @click="step = 3" flat color="primary">
+            {{ $t('installation.erase-disk-confirmation.confirm') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -224,7 +244,8 @@ export default {
       tmpPath: "",
       extractedImagePath: "",
       extractedImageName: "extracted_image.img",
-      console: null // not enabled if null
+      console: null, // not enabled if null,
+      eraseDiskConfirmationModal: false
     }
   },
   created() {
@@ -274,7 +295,9 @@ export default {
         this.fetchCountries();
       }
       if (step === 3) {
-        this.downloadImage();
+        // add confirmation modal
+        this.eraseDiskConfirmationModal = false;
+        this.downloadImage()
       }
       if (step === 4) {
         this.writeImage();
@@ -290,7 +313,8 @@ export default {
   methods: {
     prepareConsole() {
       // set console data
-      if (this.$store.state.consoles !== undefined && this.$store.state.consoles !== 0) {
+      // in the case of the user having only one console, we set it as the console directly
+      if (this.$store.state.consoles !== undefined && this.$store.state.consoles === 1) {
         this.console = this.$store.state.consoles[0]
       }      
     },
