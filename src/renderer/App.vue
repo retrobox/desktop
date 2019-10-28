@@ -174,39 +174,7 @@
           } else {
             if (localStorage.getItem('userToken') !== null) {
               // verify validity of the token by calling account info API route
-              Axios.get(this.$store.state.apiEndpoint + '/dashboard', {
-                headers: {
-                  Authorization: 'Bearer ' + localStorage.getItem('userToken')
-                }
-              }).then((res) => {
-                console.log(res.data)
-
-                this.isLogged = true
-                this.globalLoading = false
-                // fetch consoles
-                // fetch consoles from API
-                // get serial number and token
-                moment.locale(this.$i18n.locale)
-                let consoles = res.data.data.consoles.map(item => {
-                  if (item.created_at !== null) {
-                    item.created_at = moment(item.created_at).fromNow()
-                  }
-                  if (item.first_boot_at !== null) {
-                    item.first_boot_at = moment(item.first_boot_at).fromNow()
-                  }
-                  return item
-                })
-                
-                console.log(consoles.length + ' consoles detected!')
-
-                this.$store.commit('SET_CONSOLES', consoles)
-              }).catch((err) => {
-                console.warn("Can't login to api")
-                console.log(err.response)
-                console.error(err)
-                this.isLogged = false
-                this.globalLoading = false
-              })
+              this.fetchData()
             } else {
               this.isLogged = false
               this.globalLoading = false
@@ -215,9 +183,55 @@
       });
     },
     methods: {
+      fetchData() {
+        console.log('Using token: ' + localStorage.getItem('userToken'))
+        Axios.post(this.$store.state.apiEndpoint + '/graphql', {
+            query: `query {
+              getManyConsoles {
+                id,
+                token,
+                first_boot_at,
+                created_at
+              }
+            }`
+          },{
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('userToken')
+            }
+          }).then((res) => {
+          console.log(res.data)
+
+          this.isLogged = true
+          this.globalLoading = false
+          // fetch consoles
+          // fetch consoles from API
+          // get serial number and token
+          moment.locale(this.$i18n.locale)
+          let consoles = res.data.data.getManyConsoles.map(item => {
+            if (item.created_at !== null) {
+              item.created_at = moment(item.created_at).fromNow()
+            }
+            if (item.first_boot_at !== null) {
+              item.first_boot_at = moment(item.first_boot_at).fromNow()
+            }
+            return item
+          })
+          
+          console.log(consoles.length + ' consoles detected!')
+
+          this.$store.commit('SET_CONSOLES', consoles)
+        }).catch((err) => {
+          console.warn("Can't login to api")
+          console.log(err.response)
+          console.error(err)
+          this.isLogged = false
+          this.globalLoading = false
+        })
+      },
       onLogged() {
         this.isLogged = true
         this.alert = true
+        this.fetchData()
       },
       invertColor() {
         this.dark = !this.dark
