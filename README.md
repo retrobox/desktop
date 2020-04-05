@@ -4,34 +4,19 @@ Build with electron-vue, available in french and english (at this time).
 
 ### Preview :
 
-![alt](https://static.retrobox.tech/img/app/Retrobox_Desktop_App_euyZshYEtp.png)
-
-### Dependencies
-
-| See in | [package.json](https://github.com/retrobox/desktop/blob/master/package.json) |
-|--|--|
-| [vue](https://www.npmjs.com/package/vue) | [crypto](https://www.npmjs.com/package/crypto) |
-| [vuetify](https://www.npmjs.com/package/vuetify) | [electron-sudo](https://www.npmjs.com/package/electron-sudo) |
-| [drivelist](https://www.npmjs.com/package/drivelist) | [is-admin](https://www.npmjs.com/package/is-admin) |
-| [etcher-image-write](https://www.npmjs.com/package/etcher-image-write) | [is-elevated](https://www.npmjs.com/package/is-elevated) |
-| [decompress](https://www.npmjs.com/package/decompress) | [socket.io-client](https://www.npmjs.com/package/socket.io-client) |
-| [decompress-unzip](https://www.npmjs.com/package/decompress-unzip) | [sudo-prompt](https://www.npmjs.com/package/sudo-prompt) |
-| [filesize](https://www.npmjs.com/package/filesize) | [vue-clipboard2](https://www.npmjs.com/package/vue-clipboard2) |
-| [request](https://www.npmjs.com/package/request)| [vue-i18n](https://www.npmjs.com/package/vue-i18n) |
-| [request-progress](https://www.npmjs.com/package/request-progress) | [vuex](https://www.npmjs.com/package/vuex) |
-| [axios](https://www.npmjs.com/package/axios) | [yauzl](https://www.npmjs.com/package/yauzl)  |
+![alt](https://static.retrobox.tech/img/app/desktopapp_preview.png)
 
 #### Build Setup (linux)
 
 ``` bash
 # install dependencies
-npm install
+yarn install
 
 # serve with hot reload at localhost:9080
-npm run dev
+env WEB_ENDPOINT=https://retrobox.tech WEB_SOCKET_ENDPOINT=https://ws.retrobox.tech API_ENDPOINT=http://api.retrobox.tech yarn run dev
 
 # build electron application for production
-npm run build
+yarn run build
 
 
 ```
@@ -46,19 +31,20 @@ Environment needed (or recommended) :
 2. Python 2.7 (and ONLY this version)
 3. Npm v6.4.1 (or newer)
 4. Node v10.15.0 (or newer)
+5. API & web & ws server online on your lan.
 
 ``` bash
 # install dependencies
-npm install
+yarn install
 
 # install Native Node Modules
-npm install --save-dev electron-rebuild
+yarn install --save-dev electron-rebuild
 
 # serve with hot reload at localhost:9080
-npm run dev
+yarn run dev
 
 # build electron application for production
-npm run build
+yarn run build
 
 # Every time you run "npm install", run this
 ./node_modules/.bin/electron-rebuild
@@ -83,3 +69,18 @@ option 2:
 when it come to write image, try to launch the same programm by tring to known where the programm is run
 
 on windows: use more complicated thing while dont elevate with linux
+
+### Dependencies
+
+| See in | [package.json](https://github.com/retrobox/desktop/blob/master/package.json) |
+|--|--|
+| [vue](https://www.npmjs.com/package/vue) | [crypto](https://www.npmjs.com/package/crypto) |
+| [vuetify](https://www.npmjs.com/package/vuetify) | [electron-sudo](https://www.npmjs.com/package/electron-sudo) |
+| [drivelist](https://www.npmjs.com/package/drivelist) | [is-admin](https://www.npmjs.com/package/is-admin) |
+| [etcher-image-write](https://www.npmjs.com/package/etcher-image-write) | [is-elevated](https://www.npmjs.com/package/is-elevated) |
+| [decompress](https://www.npmjs.com/package/decompress) | [socket.io-client](https://www.npmjs.com/package/socket.io-client) |
+| [decompress-unzip](https://www.npmjs.com/package/decompress-unzip) | [sudo-prompt](https://www.npmjs.com/package/sudo-prompt) |
+| [filesize](https://www.npmjs.com/package/filesize) | [vue-clipboard2](https://www.npmjs.com/package/vue-clipboard2) |
+| [request](https://www.npmjs.com/package/request)| [vue-i18n](https://www.npmjs.com/package/vue-i18n) |
+| [request-progress](https://www.npmjs.com/package/request-progress) | [vuex](https://www.npmjs.com/package/vuex) |
+| [axios](https://www.npmjs.com/package/axios) | [yauzl](https://www.npmjs.com/package/yauzl)  |
