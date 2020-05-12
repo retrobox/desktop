@@ -29,7 +29,7 @@ Environment needed (or recommended) :
 
 1. VS Enterprise 2015 with **all components** (or just community version) (And restart your computer after the installation)
 2. Python 2.7 (and ONLY this version)
-3. Npm v6.4.1 (or newer)
+3. Yarn 1.16.0 (or newer)
 4. Node v10.15.0 (or newer)
 5. API & web & ws server online on your lan.
 
@@ -46,7 +46,7 @@ yarn run dev
 # build electron application for production
 yarn run build
 
-# Every time you run "npm install", run this
+# Every time you run "yarn install", run this
 ./node_modules/.bin/electron-rebuild
 
 ```
